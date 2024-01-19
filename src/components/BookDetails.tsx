@@ -9,7 +9,7 @@ export const BookDetails = () => {
             <p className="text-[#9797b0]">Arthur C. Clarke</p>
           </div>
           <div className="flex items-center">
-            <span className="w-12 h-12 bg-slate-400 flex justify-center items-center rounded-full">8.4</span>
+            <span className="w-12 h-12 bg-slate-500 flex justify-center items-center rounded-full text-xl">8.4</span>
           </div>
         </div>
         <div className="flex flex-col">
@@ -20,7 +20,7 @@ export const BookDetails = () => {
             tempora. Repudiandae, repellat accusantium fugiat velit beatae exercitationem veritatis perspiciatis labore placeat pariatur?
           </p>
         </div>
-        <button className="bg-red-600 mt-auto p-4 rounded-lg hover:scale-110 transition-all">Gi rating</button>
+        <button className="bg-red-600 mt-auto p-4 rounded-lg">Gi rating</button>
       </div>
     </>
   );

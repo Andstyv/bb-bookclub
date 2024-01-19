@@ -5,8 +5,9 @@ import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ErrorPage } from "./components/ErrorPage";
 import Auth from "./Auth";
 import { Navbar } from "./components/Navbar";
-import { LoggedInHomeView } from "./components/LoggedInHomeView";
 import { BookDetails } from "./components/BookDetails";
+import { HomeView } from "./views/HomeView";
+import { BookRatings } from "./views/BookRatings";
 
 function App() {
   const { session } = useGetSession();
@@ -29,11 +30,19 @@ function App() {
       children: [
         {
           path: "/",
-          element: session ? <BookDetails /> : <Auth />,
+          element: <HomeView />,
         },
         {
           path: "/profil",
           element: session ? <Account session={session ?? undefined} /> : <Auth />,
+        },
+        {
+          path: "/detaljer",
+          element: <BookDetails />,
+        },
+        {
+          path: "/ratinger",
+          element: <BookRatings />,
         },
       ],
     },
