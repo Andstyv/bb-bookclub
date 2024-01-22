@@ -38,7 +38,7 @@ function App() {
         },
         {
           path: "/detaljer",
-          element: <BookDetails />,
+          element: <BookDetails session={session ?? undefined} />,
         },
         {
           path: "/ratinger",
