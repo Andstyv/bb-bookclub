@@ -14,6 +14,7 @@ type SessionProps = {
 export default function Account({ session }: SessionProps) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState(null);
+  const [avatar, setAvatar] = useState(null);
   const { register, handleSubmit } = useForm<FormValues>();
 
   useEffect(() => {
@@ -21,7 +22,6 @@ export default function Account({ session }: SessionProps) {
     async function getProfile() {
       setLoading(true);
       const { user } = session;
-
       const { data, error } = await supabase.from("profiles").select(`username, avatar_url`).eq("id", user.id).single();
 
       if (!ignore) {
@@ -29,12 +29,11 @@ export default function Account({ session }: SessionProps) {
           console.warn(error);
         } else if (data) {
           setUsername(data.username);
+          setAvatar(data.avatar_url);
         }
       }
-
       setLoading(false);
     }
-
     getProfile();
 
     return () => {
@@ -45,11 +44,13 @@ export default function Account({ session }: SessionProps) {
   async function updateProfile(formData: FieldValues) {
     setLoading(true);
     const { user } = session;
+    const randomNumber = Math.floor(Math.random() * 99 + 1);
 
     const updates = {
       id: user.id,
       username: formData.username,
       updated_at: new Date(),
+      avatar_url: `https://avatar.iran.liara.run/public/${randomNumber}`,
     };
 
     const { error } = await supabase.from("profiles").upsert(updates);
@@ -64,7 +65,10 @@ export default function Account({ session }: SessionProps) {
     <>
       <div className="flex flex-col items-center text-white">
         <div className="bg-[#393848] p-8 rounded shadow-md w-full max-w-xl">
-          <h1 className="text-2xl font-semibold mb-6">Din profil</h1>
+          <h1 className="text-2xl font-semibold mb-6">{username ? "Din Profil" : "Legg til brukernavn"}</h1>
+          <div className="flex justify-center items-center my-4">
+            {avatar ? <img src={avatar} className="w-24 h-24" /> : <div className="w-24 h-24 bg-slate-200 rounded-full"></div>}
+          </div>
           <form onSubmit={handleSubmit(updateProfile)}>
             <div className="mb-4">
               <label htmlFor="email" className="block text-sm font-bold mb-2">
@@ -73,7 +77,7 @@ export default function Account({ session }: SessionProps) {
               <input
                 id="email"
                 type="text"
-                className="text-black border rounded px-3 py-2 w-full focus:outline-none bg-gray-200"
+                className=" italic text-gray-600 border rounded px-3 py-2 w-full focus:outline-none bg-gray-200"
                 value={session.user.email}
                 disabled
               />
@@ -93,7 +97,7 @@ export default function Account({ session }: SessionProps) {
             </div>
             <div className="flex justify-center">
               <button className="py-2 px-2 rounded-lg bg-yellow-600 font-bold" type="submit" disabled={loading}>
-                {loading ? "Laster ..." : "Oppdater informasjon"}
+                {loading ? "Laster ..." : username ? "Oppdater informasjon" : "Opprett brukernavn"}
               </button>
             </div>
           </form>

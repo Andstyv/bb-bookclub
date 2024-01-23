@@ -4,6 +4,7 @@ import { supabase } from "../supabaseClient";
 import { useGetAvgRatingForBook } from "../hooks/useGetAvgRatingForBook";
 import { useGetRatingsByUser } from "../hooks/useGetRatingByUser";
 import { Session } from "@supabase/gotrue-js";
+import { currentBook } from "../book/currentBook";
 
 type DataProps = {
   movie_id: number;
@@ -14,11 +15,11 @@ type Props = {
   session?: Session;
 };
 
-const currentBookISBN = "12345";
+const currentBookISBN = currentBook.isbn;
 
 export const BookDetails = ({ session }: Props) => {
   const { register, handleSubmit } = useForm<DataProps>();
-  const [userRatingScore, setUserRatingScore] = useState<string>("0");
+  const [userRatingScore, setUserRatingScore] = useState<string>("-");
   const { avgRating } = useGetAvgRatingForBook(currentBookISBN);
   const { userRating, isLoading } = useGetRatingsByUser({ session, currentBookISBN });
 
@@ -46,11 +47,11 @@ export const BookDetails = ({ session }: Props) => {
   return (
     <>
       <div className="flex w-full max-w-2xl flex-col text-white gap-6">
-        <div className="bg-cover bg-no-repeat rounded-2xl h-96 w-full bg-[url(https://m.media-amazon.com/images/I/91EQ0zyctlL._AC_UF1000,1000_QL80_.jpg)]"></div>
+        <div className={`bg-cover bg-no-repeat rounded-2xl h-96 w-full bg-[url(${currentBook.cover_img_url})]`}></div>
         <div className="flex">
           <div className="flex-1 flex flex-col">
-            <h2 className="text-2xl">Rendezvous with Rama</h2>
-            <p className="text-[#9797b0]">Arthur C. Clarke</p>
+            <h2 className="text-2xl">{currentBook.title}</h2>
+            <p className="text-[#9797b0]">{currentBook.author}</p>
           </div>
           <div className="flex items-center">
             <span className="w-12 h-12 bg-slate-500 flex justify-center items-center rounded-full text-xl">{avgRating || "-"}</span>
@@ -58,11 +59,7 @@ export const BookDetails = ({ session }: Props) => {
         </div>
         <div className="flex flex-col">
           <h3 className="text-xl">Description</h3>
-          <p className="text-[#9797b0]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, sequi dolores autem unde non suscipit eos eligendi minima maxime.
-            Aliquid placeat facilis quo, aspernatur libero nisi sit facere! Totam rem vel, delectus dignissimos deleniti natus minima asperiores
-            tempora. Repudiandae, repellat accusantium fugiat velit beatae exercitationem veritatis perspiciatis labore placeat pariatur?
-          </p>
+          <p className="text-[#9797b0]">{currentBook.description}</p>
         </div>
         {!isLoading && (
           <form className="card-body p-4 my-8 border rounded-lg bg-slate-200 flex flex-col gap-4" onSubmit={handleSubmit(updateRating)}>

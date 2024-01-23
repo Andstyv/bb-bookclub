@@ -8,14 +8,31 @@ import { Navbar } from "./components/Navbar";
 import { BookDetails } from "./components/BookDetails";
 import { HomeView } from "./views/HomeView";
 import { BookRatings } from "./views/BookRatings";
+import { useEffect, useState } from "react";
+import { supabase } from "./supabaseClient";
 
 function App() {
   const { session } = useGetSession();
+  const [avatar, setAvatar] = useState("");
+
+  useEffect(() => {
+    console.log("using avatarget");
+    const fetchAvatarImg = async () => {
+      console.log("using fetch avatar");
+      if (session) {
+        const { data } = await supabase.from("profiles").select("avatar_url").eq("id", session?.user.id);
+        if (data) {
+          setAvatar(data[0].avatar_url);
+        }
+      }
+    };
+    fetchAvatarImg();
+  }, [session]);
 
   const AppLayout = () => {
     return (
       <>
-        <Navbar session={session ?? undefined} />
+        <Navbar session={session ?? undefined} avatar={avatar ?? null} />
         <ContentWrapper>
           <Outlet />
         </ContentWrapper>

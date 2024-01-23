@@ -4,7 +4,7 @@ import { SearchBooks } from "../components/SearchBooks";
 export const HomeView = () => {
   return (
     <>
-      <SearchBooks />
+      {/* <SearchBooks /> */}
       <CurrentBook />
     </>
   );
