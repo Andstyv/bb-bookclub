@@ -16,9 +16,11 @@ export const Navbar = ({ session, avatar }: Props) => {
     <>
       <div className="justify-between px-4 flex max-w-2xl m-auto text-white pt-8">
         <div className="min-w-20 flex">
-          <Link to={"/profil"} className="w-12 h-12 bg-red-300 rounded-full">
-            <img src={avatar || ""} />
-          </Link>
+          {session && (
+            <Link to={"/profil"} className="w-12 h-12 bg-red-300 rounded-full">
+              <img src={avatar || ""} />
+            </Link>
+          )}
         </div>
         <div className="flex-1 flex justify-center items-center">
           <Link to={"/"} className="font-bold text-2xl">
@@ -26,7 +28,15 @@ export const Navbar = ({ session, avatar }: Props) => {
           </Link>
         </div>
         <div className="flex items-center justify-end min-w-20">
-          <button onClick={session ? logOut : undefined}>{session ? "Logg ut" : ""}</button>
+          <button onClick={session ? logOut : undefined}>
+            {session ? (
+              "Logg ut"
+            ) : (
+              <Link to={"/profil"} className="font-bold text-sm">
+                Logg inn
+              </Link>
+            )}
+          </button>
         </div>
       </div>
     </>

@@ -46,7 +46,7 @@ export const BookDetails = ({ session }: Props) => {
 
   return (
     <>
-      <div className="flex w-full max-w-2xl flex-col text-white gap-6">
+      <div className="flex w-full max-w-2xl flex-col text-white gap-6 mt-12">
         <div className={`bg-cover bg-no-repeat rounded-2xl h-96 w-full bg-[url(${currentBook.cover_img_url})]`}></div>
         <div className="flex">
           <div className="flex-1 flex flex-col">
@@ -61,7 +61,7 @@ export const BookDetails = ({ session }: Props) => {
           <h3 className="text-xl">Description</h3>
           <p className="text-[#9797b0]">{currentBook.description}</p>
         </div>
-        {!isLoading && (
+        {!isLoading && session && (
           <form className="card-body p-4 my-8 border rounded-lg bg-slate-200 flex flex-col gap-4" onSubmit={handleSubmit(updateRating)}>
             {userRating?.rating_score ? (
               <p className="italic text-center text-black">{`Du har allerede gitt denne ${userRating?.rating_score} poeng`}</p>

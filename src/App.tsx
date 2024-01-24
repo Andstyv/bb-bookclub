@@ -5,11 +5,11 @@ import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ErrorPage } from "./components/ErrorPage";
 import Auth from "./Auth";
 import { Navbar } from "./components/Navbar";
-import { BookDetails } from "./components/BookDetails";
 import { HomeView } from "./views/HomeView";
 import { BookRatings } from "./views/BookRatings";
 import { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
+import { BookDetails } from "./views/BookDetails";
 
 function App() {
   const { session } = useGetSession();

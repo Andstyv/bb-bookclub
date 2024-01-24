@@ -63,7 +63,7 @@ export default function Account({ session }: SessionProps) {
 
   return (
     <>
-      <div className="flex flex-col items-center text-white">
+      <div className="flex flex-col items-center text-white mt-12">
         <div className="bg-[#393848] p-8 rounded shadow-md w-full max-w-xl">
           <h1 className="text-2xl font-semibold mb-6">{username ? "Din Profil" : "Legg til brukernavn"}</h1>
           <div className="flex justify-center items-center my-4">

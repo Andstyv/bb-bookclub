@@ -1,11 +1,11 @@
 import { CurrentBook } from "../components/CurrentBook";
-import { SearchBooks } from "../components/SearchBooks";
+import { LatestRatings } from "../components/LatestRatings";
 
 export const HomeView = () => {
   return (
     <>
-      {/* <SearchBooks /> */}
       <CurrentBook />
+      <LatestRatings />
     </>
   );
 };
