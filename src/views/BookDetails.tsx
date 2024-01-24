@@ -5,6 +5,7 @@ import { useGetAvgRatingForBook } from "../hooks/useGetAvgRatingForBook";
 import { useGetRatingsByUser } from "../hooks/useGetRatingByUser";
 import { Session } from "@supabase/gotrue-js";
 import { currentBook } from "../book/currentBook";
+import { useGetUser } from "../hooks/useGetUser";
 
 type DataProps = {
   movie_id: number;
@@ -22,15 +23,19 @@ export const BookDetails = ({ session }: Props) => {
   const [userRatingScore, setUserRatingScore] = useState<string>("-");
   const { avgRating } = useGetAvgRatingForBook(currentBookISBN);
   const { userRating, isLoading } = useGetRatingsByUser({ session, currentBookISBN });
+  const { userData } = useGetUser({ session });
 
-  async function updateRating(formData: FieldValues) {
+  async function addNewBookRating(formData: FieldValues) {
     const updates = {
       user_id: session?.user.id,
-      username: "Rønna Test",
-      book_isbn: "12345",
+      book_isbn: currentBook.isbn,
+      username: userData?.username,
       rating_score: parseFloat(formData.rating_score),
-      book_title: "Lord of the Rings",
-      author_name: "J.R.R. Tolkien",
+      book_id: currentBook.id,
+      book_title: currentBook.title,
+      author_name: currentBook.author,
+      book_description: currentBook.description,
+      book_cover_url: currentBook.cover_img_url,
     };
 
     const { error } = await supabase.from("ratings").insert(updates);
@@ -39,8 +44,21 @@ export const BookDetails = ({ session }: Props) => {
       console.log(updates);
       alert(error.message);
     } else {
-      console.log(session);
+      alert("Added your rating!");
+    }
+  }
+
+  async function updateBookRating(formData: FieldValues) {
+    const updates = {
+      rating_score: parseFloat(formData.rating_score),
+    };
+    const { error } = await supabase.from("ratings").update(updates).eq("user_id", session?.user.id);
+
+    if (error) {
       console.log(updates);
+      alert(error.message);
+    } else {
+      alert("Updated your rating!");
     }
   }
 
@@ -62,7 +80,10 @@ export const BookDetails = ({ session }: Props) => {
           <p className="text-[#9797b0]">{currentBook.description}</p>
         </div>
         {!isLoading && session && (
-          <form className="card-body p-4 my-8 border rounded-lg bg-slate-200 flex flex-col gap-4" onSubmit={handleSubmit(updateRating)}>
+          <form
+            className="card-body p-4 my-8 border rounded-lg bg-slate-200 flex flex-col gap-4"
+            onSubmit={handleSubmit(userRating ? updateBookRating : addNewBookRating)}
+          >
             {userRating?.rating_score ? (
               <p className="italic text-center text-black">{`Du har allerede gitt denne ${userRating?.rating_score} poeng`}</p>
             ) : (

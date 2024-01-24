@@ -12,7 +12,7 @@ import { supabase } from "./supabaseClient";
 import { BookDetails } from "./views/BookDetails";
 
 function App() {
-  const { session } = useGetSession();
+  const { session, loadingSession } = useGetSession();
   const [avatar, setAvatar] = useState("");
 
   useEffect(() => {
@@ -51,7 +51,7 @@ function App() {
         },
         {
           path: "/profil",
-          element: session ? <Account session={session ?? undefined} /> : <Auth />,
+          element: session && !loadingSession ? <Account session={session ?? undefined} /> : <Auth />,
         },
         {
           path: "/detaljer",

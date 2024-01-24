@@ -10,7 +10,7 @@ export const LatestRatings = () => {
       {ratings && !isLoading && (
         <div className="flex flex-col gap-4 mt-4">
           {ratings.map((rating) => (
-            <LatestRatingsCard rating={rating} />
+            <LatestRatingsCard rating={rating} key={rating.id} />
           ))}
         </div>
       )}
