@@ -15,7 +15,7 @@ export const useGetAvgRatingForBook = (id?: string) => {
         const filteredData = data.filter((book) => book.book_id == id);
         const avgBookRating = filteredData.reduce((a, { rating_score }) => a + rating_score, 0) / filteredData.length;
         setIsLoading(false);
-        setAvgRatingByBookId(avgBookRating.toFixed(2));
+        setAvgRatingByBookId(avgBookRating.toFixed(1));
       }
     };
     fetchAvgRatingForBook();

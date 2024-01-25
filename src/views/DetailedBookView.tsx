@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { books } from "../books/books";
 import { Book } from "../types/types";
 import { useGetRatingByUserAndBookId } from "../hooks/useGetRatingsByUserAndBookId";
+import toast, { Toaster } from "react-hot-toast";
 
 type DataProps = {
   movie_id: number;
@@ -73,7 +74,10 @@ export const DetailedBookView = ({ session }: Props) => {
       console.log(updates);
       alert(error.message);
     } else {
-      alert("Updated your rating!");
+      toast.success("Oppdaterte rating", {
+        duration: 3000,
+        position: "bottom-center",
+      });
     }
   }
 
@@ -123,6 +127,7 @@ export const DetailedBookView = ({ session }: Props) => {
           )}
         </div>
       )}
+      <Toaster />
     </>
   );
 };
