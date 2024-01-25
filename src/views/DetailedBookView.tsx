@@ -44,10 +44,10 @@ export const DetailedBookView = ({ session }: Props) => {
 
     const updates = {
       user_id: session?.user.id,
+      book_id: currentBook?.id,
       book_isbn: currentBook?.isbn,
       username: userData?.username,
       rating_score: parseFloat(formData.rating_score),
-      book_id: currentBook?.id,
       book_title: currentBook?.title,
       author_name: currentBook?.author,
       book_description: currentBook?.description,
@@ -60,7 +60,10 @@ export const DetailedBookView = ({ session }: Props) => {
       console.log(updates);
       alert(error.message);
     } else {
-      alert("Added your rating!");
+      toast.success("Rating registrert", {
+        duration: 3000,
+        position: "bottom-center",
+      });
     }
   }
 
@@ -68,7 +71,7 @@ export const DetailedBookView = ({ session }: Props) => {
     const updates = {
       rating_score: parseFloat(formData.rating_score),
     };
-    const { error } = await supabase.from("ratings").update(updates).eq("user_id", session?.user.id);
+    const { error } = await supabase.from("ratings").update(updates).eq("user_id", session?.user.id).eq("book_id", currentBook?.id);
 
     if (error) {
       console.log(updates);

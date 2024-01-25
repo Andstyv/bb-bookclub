@@ -10,7 +10,7 @@ export const books = [
   },
   {
     id: 2,
-    isbn: "12345",
+    isbn: "998877",
     title: "Moby Dick",
     author: "Herman Melville",
     description:
