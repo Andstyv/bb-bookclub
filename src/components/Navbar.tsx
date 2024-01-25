@@ -26,16 +26,16 @@ export const Navbar = ({ session, avatar }: Props) => {
           )}
         </div>
         <div className="flex-1 flex justify-center items-center">
-          <Link to={"/"} className="font-bold text-2xl" onClick={() => setShowHamburgerMenu(false)}>
+          <Link to={"/"} className="font-bold text-4xl" onClick={() => setShowHamburgerMenu(false)}>
             BustyBooks
           </Link>
         </div>
         <div className="flex items-center justify-end min-w-20">
-          <button className="ml-2 text-4xl" onClick={() => setShowHamburgerMenu(!showHamburgerMenu)}>
+          <button className="ml-2 text-4xl" onClick={session ? () => setShowHamburgerMenu(!showHamburgerMenu) : undefined}>
             {session ? (
               "🍔"
             ) : (
-              <Link to={"/profil"} className="font-bold text-sm">
+              <Link to={"/profil"} className="font-bold text-xs p-1 bg-slate-500 rounded-lg">
                 Logg inn
               </Link>
             )}
@@ -44,9 +44,9 @@ export const Navbar = ({ session, avatar }: Props) => {
       </div>
       {showHamburgerMenu && (
         <div className="absolute w-full h-full bg-[#272736] z-10">
-          <ul className="text-white font-bold px-2 flex flex-col justify-center items-center mt-20 gap-8">
+          <ul className="text-white font-bold px-2 flex flex-col justify-center items-center mt-20 gap-12">
             <li>
-              <Link to={"/mine-ratinger"} onClick={() => setShowHamburgerMenu(false)}>
+              <Link to={"/mine-ratinger"} onClick={() => setShowHamburgerMenu(false)} className="pb-1 border-b-2">
                 Mine ratinger
               </Link>
             </li>

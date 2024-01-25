@@ -9,11 +9,11 @@ type Props = {
 export const CurrentBook = ({ currentBookId, daysLeft }: Props) => {
   return (
     <>
-      <div className="w-full flex flex-col gap-4 text-white mt-10">
-        <h1 className="text-4xl mb-2 font-semibold">Nå leses:</h1>
+      <div className="w-full flex flex-col gap-2 text-white mt-10">
+        <h1 className="text-2xl mb-1 font-semibold">Nå leses:</h1>
         <Link
           to={`detaljer/${currentBookId}`}
-          className="cursor-pointer bg-[url(https://m.media-amazon.com/images/I/91EQ0zyctlL._AC_UF1000,1000_QL80_.jpg)] bg-cover bg-no-repeat h-96 w-full rounded-xl bg-"
+          className="cursor-pointer bg-[url(https://m.media-amazon.com/images/I/91EQ0zyctlL._AC_UF1000,1000_QL80_.jpg)] bg-cover bg-no-repeat h-80 w-full rounded-xl bg-"
         >
           <div className="text-black flex flex-col justify-end h-full">
             <div className="pb-4 pl-4 bg-gradient-to-b from-transparent to-black py-8 text-white rounded-xl">
@@ -22,7 +22,7 @@ export const CurrentBook = ({ currentBookId, daysLeft }: Props) => {
             </div>
           </div>
         </Link>
-        <h2 className="mt-8 text-xl text-center">Gjenstående tid:</h2>
+        <h2 className="mt-2 text-xl text-center mb-0">Gjenstående tid:</h2>
         <div className="bg-slate-500 rounded-lg flex justify-center py-2 px-4 font-semibold text-lg m-auto">{daysLeft.days} dager</div>
       </div>
     </>

@@ -40,8 +40,6 @@ export const DetailedBookView = ({ session }: Props) => {
   }, [id]);
 
   async function addNewBookRating(formData: FieldValues) {
-    console.log("ADD NEW BOOKING RATING");
-
     const updates = {
       user_id: session?.user.id,
       book_id: currentBook?.id,
@@ -57,7 +55,6 @@ export const DetailedBookView = ({ session }: Props) => {
     const { error } = await supabase.from("ratings").insert(updates);
 
     if (error) {
-      console.log(updates);
       alert(error.message);
     } else {
       toast.success("Rating registrert", {
@@ -74,7 +71,6 @@ export const DetailedBookView = ({ session }: Props) => {
     const { error } = await supabase.from("ratings").update(updates).eq("user_id", session?.user.id).eq("book_id", currentBook?.id);
 
     if (error) {
-      console.log(updates);
       alert(error.message);
     } else {
       toast.success("Oppdaterte rating", {
@@ -87,7 +83,7 @@ export const DetailedBookView = ({ session }: Props) => {
   return (
     <>
       {currentBook && (
-        <div className="flex w-full max-w-2xl flex-col text-white gap-6 mt-12">
+        <div className="flex w-full max-w-2xl flex-col text-white gap-6 mt-12 mb-16">
           <div>
             <img src={currentBook.cover_img_url} className="rounded-xl h-96 w-full object-cover object-top" />
           </div>
