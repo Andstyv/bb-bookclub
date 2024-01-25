@@ -3,18 +3,18 @@ import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 
 export const useGetSession = () => {
-  const [session, setSession] = useState<Session | null>();
+  const [session, setSession] = useState<Session>();
   const [loadingSession, setLoadingSession] = useState<boolean | null>(true);
 
   useEffect(() => {
     setLoadingSession(true);
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
+      setSession(session ?? undefined);
       setLoadingSession(false);
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
+      setSession(session ?? undefined);
       setLoadingSession(false);
     });
   }, []);

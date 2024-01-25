@@ -1,24 +1,14 @@
 import { useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "../supabaseClient";
+import { Rating } from "../types/types";
 
 type Props = {
   session?: Session | null;
 };
 
-export interface UserRatings {
-  author_name: string;
-  book_isbn: string;
-  book_title: string;
-  created_at: string;
-  id: number;
-  rating_score: number;
-  user_id: string;
-  username: string;
-}
-
 export const useGetAllRatingsByUser = ({ session }: Props) => {
-  const [userRatings, setUserRatings] = useState<UserRatings[]>([]);
+  const [userRatings, setUserRatings] = useState<Rating[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {

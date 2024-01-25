@@ -7,32 +7,17 @@ import Auth from "./Auth";
 import { Navbar } from "./components/Navbar";
 import { HomeView } from "./views/HomeView";
 import { BookRatings } from "./views/BookRatings";
-import { useEffect, useState } from "react";
-import { supabase } from "./supabaseClient";
 import { BookDetails } from "./views/BookDetails";
+import { useGetUser } from "./hooks/useGetUser";
 
 function App() {
   const { session, loadingSession } = useGetSession();
-  const [avatar, setAvatar] = useState("");
-
-  useEffect(() => {
-    console.log("using avatarget");
-    const fetchAvatarImg = async () => {
-      console.log("using fetch avatar");
-      if (session) {
-        const { data } = await supabase.from("profiles").select("avatar_url").eq("id", session?.user.id);
-        if (data) {
-          setAvatar(data[0].avatar_url);
-        }
-      }
-    };
-    fetchAvatarImg();
-  }, [session]);
+  const { userData } = useGetUser({ session });
 
   const AppLayout = () => {
     return (
       <>
-        <Navbar session={session ?? undefined} avatar={avatar ?? null} />
+        <Navbar session={session ?? undefined} avatar={userData?.avatar_url || undefined} />
         <ContentWrapper>
           <Outlet />
         </ContentWrapper>
@@ -59,7 +44,7 @@ function App() {
         },
         {
           path: "/ratinger",
-          element: <BookRatings />,
+          element: <BookRatings session={session ?? undefined} loadingSession={loadingSession} />,
         },
       ],
     },

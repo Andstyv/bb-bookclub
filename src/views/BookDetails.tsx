@@ -26,6 +26,7 @@ export const BookDetails = ({ session }: Props) => {
   const { userData } = useGetUser({ session });
 
   async function addNewBookRating(formData: FieldValues) {
+    console.log("ADD NEW BOOKING RATING");
     const updates = {
       user_id: session?.user.id,
       book_isbn: currentBook.isbn,

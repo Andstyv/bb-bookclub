@@ -1,7 +1,7 @@
-import { UserRatings } from "../hooks/useGetAllRatings";
+import { Rating } from "../types/types";
 
 interface Props {
-  rating: UserRatings;
+  rating: Rating;
 }
 
 export const LatestRatingsCard = ({ rating }: Props) => {
