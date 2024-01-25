@@ -5,10 +5,10 @@ import { Rating } from "../types/types";
 
 type Props = {
   session?: Session;
-  currentBookISBN: string;
+  id?: string;
 };
 
-export const useGetRatingsByUser = ({ session, currentBookISBN }: Props) => {
+export const useGetRatingsByUser = ({ session, id }: Props) => {
   const [userRating, setUserRating] = useState<Rating | null>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -25,7 +25,8 @@ export const useGetRatingsByUser = ({ session, currentBookISBN }: Props) => {
         if (error) {
           console.log(error);
         } else if (data) {
-          const matchingRating = data.find((el) => (el.book_isbn = currentBookISBN));
+          const matchingRating = data.find((el) => el.book_id == id);
+          console.log(matchingRating);
           setUserRating(matchingRating || null);
         }
       }
@@ -36,7 +37,7 @@ export const useGetRatingsByUser = ({ session, currentBookISBN }: Props) => {
     return () => {
       ignore = true;
     };
-  }, [session, currentBookISBN]);
+  }, [session, id]);
 
   return { userRating, isLoading };
 };

@@ -18,3 +18,12 @@ export interface User {
   username: string;
   avatar_url: string;
 }
+
+export type Book = {
+  id: number;
+  isbn: string;
+  title: string;
+  author: string;
+  description: string;
+  cover_img_url: string;
+};

@@ -39,11 +39,11 @@ function App() {
           element: session && !loadingSession ? <Account session={session ?? undefined} /> : <Auth />,
         },
         {
-          path: "/detaljer",
+          path: "detaljer/:id",
           element: <BookDetails session={session ?? undefined} />,
         },
         {
-          path: "/ratinger",
+          path: "/mine-ratinger",
           element: <BookRatings session={session ?? undefined} loadingSession={loadingSession} />,
         },
       ],

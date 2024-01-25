@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 
-export const useGetAvgRatingForBook = (isbn: string) => {
-  const [avgRating, setAvgRating] = useState<string | null>();
+export const useGetAvgRatingForBook = (id?: string) => {
+  const [avgRating, setAvgRating] = useState<string | null>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -13,13 +13,16 @@ export const useGetAvgRatingForBook = (isbn: string) => {
 
       if (data) {
         setIsLoading(false);
-        const filteredData = data.filter((book) => (book.book_isbn = isbn));
+        console.log(data);
+        console.log(id);
+        const filteredData = data.filter((book) => book.book_id == id);
+        console.log(filteredData);
         const avgBookRating = filteredData.reduce((a, { rating_score }) => a + rating_score, 0) / filteredData.length;
-        setAvgRating(avgBookRating.toFixed(2));
+        if (avgBookRating) setAvgRating(avgBookRating.toFixed(2));
       }
     };
     fetchDaysAvailableData();
-  }, [isbn]);
+  }, [id]);
 
   return { avgRating, isLoading };
 };

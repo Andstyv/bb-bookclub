@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Rating } from "../types/types";
 
 interface Props {
@@ -6,7 +7,7 @@ interface Props {
 
 export const RatingCard = ({ book }: Props) => {
   return (
-    <div className="shadow-lg h-40 rounded-xl bg-[#393848] text-white">
+    <Link to={`/detaljer/${book.book_id}`} className="shadow-lg h-40 rounded-xl bg-[#393848] text-white">
       <div className="p-4 flex h-full gap-4">
         <div className="bg-red-300 w-24 h-full">
           <img src={book.book_cover_url} className="object-cover object-top w-full h-full" />
@@ -21,6 +22,6 @@ export const RatingCard = ({ book }: Props) => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };

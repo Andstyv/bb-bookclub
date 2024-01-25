@@ -6,12 +6,14 @@ export const CurrentBook = () => {
     start: new Date(),
     end: new Date(2024, 2, 16),
   });
+
+  const id = 1;
   return (
     <>
       <div className="w-full flex flex-col gap-4 text-white mt-10">
         <h1 className="text-4xl mb-2 font-semibold">Nå leses:</h1>
         <Link
-          to={"/detaljer"}
+          to={`detaljer/${id}`}
           className="cursor-pointer bg-[url(https://m.media-amazon.com/images/I/91EQ0zyctlL._AC_UF1000,1000_QL80_.jpg)] bg-cover bg-no-repeat h-96 w-full rounded-xl bg-"
         >
           <div className="text-black flex flex-col justify-end h-full">
