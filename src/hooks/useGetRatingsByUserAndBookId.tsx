@@ -25,7 +25,6 @@ export const useGetRatingByUserAndBookId = ({ session, id }: Props) => {
         .order("created_at", { ascending: false });
       if (!ignore) {
         if (error) {
-          alert("An error occured");
           console.log(error);
         } else if (data) {
           setUserRatingByBookId(data[0] || null);
