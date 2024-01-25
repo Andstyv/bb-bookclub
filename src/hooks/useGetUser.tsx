@@ -13,12 +13,13 @@ export const useGetUser = ({ session }: Props) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      setIsLoading(true);
-      const { data } = await supabase.from("profiles").select().eq("id", session?.user.id);
-
-      if (data) {
-        setIsLoading(false);
-        setUserData(data[0]);
+      if (session) {
+        setIsLoading(true);
+        const { data } = await supabase.from("profiles").select().eq("id", session?.user.id);
+        if (data) {
+          setIsLoading(false);
+          setUserData(data[0]);
+        }
       }
     };
     fetchUser();

@@ -9,8 +9,8 @@ type Props = {
   loadingSession: boolean | null;
 };
 
-export const BookRatings = ({ session, loadingSession }: Props) => {
-  const { userRatings, isLoading } = useGetAllRatingsByUser({ session });
+export const MyBookRatingsView = ({ session, loadingSession }: Props) => {
+  const { allRatingsByUser, isLoading } = useGetAllRatingsByUser({ session });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export const BookRatings = ({ session, loadingSession }: Props) => {
   return (
     <div className="w-full flex flex-col gap-4 mt-20">
       <h1 className="font-bold text-2xl text-white">Mine ratinger:</h1>
-      {userRatings && !isLoading && userRatings.map((book) => <RatingCard key={book.id} book={book} />)}
+      {allRatingsByUser && !isLoading && allRatingsByUser.map((book) => <RatingCard key={book.id} book={book} />)}
     </div>
   );
 };

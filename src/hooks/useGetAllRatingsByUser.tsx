@@ -8,26 +8,22 @@ type Props = {
 };
 
 export const useGetAllRatingsByUser = ({ session }: Props) => {
-  const [userRatings, setUserRatings] = useState<Rating[]>([]);
+  const [allRatingsByUser, setAllRatingsByUser] = useState<Rating[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("useGetAllRatingsByUser called");
-    const fetchDaysAvailableData = async () => {
+    const fetchAllRatingsByUser = async () => {
       if (session) {
         setIsLoading(true);
         const { data } = await supabase.from("ratings").select().eq("user_id", session?.user.id).order("created_at", { ascending: false });
-        console.log("useGetAllRatingsByUser data fetched");
-
         if (data) {
-          console.log(data);
           setIsLoading(false);
-          setUserRatings(data);
+          setAllRatingsByUser(data);
         }
       }
     };
-    fetchDaysAvailableData();
+    fetchAllRatingsByUser();
   }, [session]);
 
-  return { userRatings, isLoading };
+  return { allRatingsByUser, isLoading };
 };

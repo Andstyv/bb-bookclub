@@ -1,14 +1,14 @@
 import { ContentWrapper } from "./components/ContentWrapper";
 import { useGetSession } from "./hooks/useGetSession";
-import Account from "./components/Account";
+import Account from "./views/AccountView";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ErrorPage } from "./components/ErrorPage";
-import Auth from "./Auth";
+import Auth from "./views/AuthView";
 import { Navbar } from "./components/Navbar";
 import { HomeView } from "./views/HomeView";
-import { BookRatings } from "./views/BookRatings";
-import { BookDetails } from "./views/BookDetails";
 import { useGetUser } from "./hooks/useGetUser";
+import { DetailedBookView } from "./views/DetailedBookView";
+import { MyBookRatingsView } from "./views/MyBookRatingsView";
 
 function App() {
   const { session, loadingSession } = useGetSession();
@@ -40,11 +40,11 @@ function App() {
         },
         {
           path: "detaljer/:id",
-          element: <BookDetails session={session ?? undefined} />,
+          element: <DetailedBookView session={session ?? undefined} />,
         },
         {
           path: "/mine-ratinger",
-          element: <BookRatings session={session ?? undefined} loadingSession={loadingSession} />,
+          element: <MyBookRatingsView session={session ?? undefined} loadingSession={loadingSession} />,
         },
       ],
     },

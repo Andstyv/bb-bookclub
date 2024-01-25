@@ -11,7 +11,7 @@ type SessionProps = {
   session: Session;
 };
 
-export default function Account({ session }: SessionProps) {
+export default function AccountView({ session }: SessionProps) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState(null);
   const [avatar, setAvatar] = useState(null);

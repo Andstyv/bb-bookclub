@@ -27,7 +27,7 @@ export const Navbar = ({ session, avatar }: Props) => {
         </div>
         <div className="flex-1 flex justify-center items-center">
           <Link to={"/"} className="font-bold text-2xl" onClick={() => setShowHamburgerMenu(false)}>
-            BB Bokklubb
+            BustyBooks
           </Link>
         </div>
         <div className="flex items-center justify-end min-w-20">

@@ -2,12 +2,12 @@ import { FieldValues, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { useGetAvgRatingForBook } from "../hooks/useGetAvgRatingForBook";
-import { useGetRatingsByUser } from "../hooks/useGetRatingByUser";
 import { Session } from "@supabase/gotrue-js";
 import { useGetUser } from "../hooks/useGetUser";
 import { useParams } from "react-router-dom";
 import { books } from "../books/books";
 import { Book } from "../types/types";
+import { useGetRatingByUserAndBookId } from "../hooks/useGetRatingsByUserAndBookId";
 
 type DataProps = {
   movie_id: number;
@@ -18,13 +18,13 @@ type Props = {
   session?: Session;
 };
 
-export const BookDetails = ({ session }: Props) => {
+export const DetailedBookView = ({ session }: Props) => {
   const { register, handleSubmit } = useForm<DataProps>();
   const [userRatingScore, setUserRatingScore] = useState<string>("-");
   const { userData } = useGetUser({ session });
   const { id } = useParams();
-  const { avgRating } = useGetAvgRatingForBook(id);
-  const { userRating, isLoading } = useGetRatingsByUser({ session, id });
+  const { avgRatingByBookId } = useGetAvgRatingForBook(id);
+  const { userRatingByBookId, isLoading } = useGetRatingByUserAndBookId({ session, id });
   const [currentBook, setCurrentBook] = useState<Book>();
 
   useEffect(() => {
@@ -90,7 +90,7 @@ export const BookDetails = ({ session }: Props) => {
               <p className="text-[#9797b0]">{currentBook.author}</p>
             </div>
             <div className="flex items-center">
-              <span className="w-12 h-12 bg-slate-500 flex justify-center items-center rounded-full text-xl">{avgRating || "-"}</span>
+              <span className="w-12 h-12 bg-slate-500 flex justify-center items-center rounded-full text-xl">{avgRatingByBookId || "-"}</span>
             </div>
           </div>
           <div className="flex flex-col">
@@ -99,15 +99,15 @@ export const BookDetails = ({ session }: Props) => {
           </div>
           {!isLoading && session && (
             <form
-              className="card-body p-4 my-8 border rounded-lg bg-slate-200 flex flex-col gap-4"
-              onSubmit={handleSubmit(userRating ? updateBookRating : addNewBookRating)}
+              className="card-body p-4 my-8 rounded-lg bg-slate-400 flex flex-col gap-4"
+              onSubmit={handleSubmit(userRatingByBookId ? updateBookRating : addNewBookRating)}
             >
-              {userRating?.rating_score ? (
-                <p className="italic text-center text-black">{`Du har allerede gitt denne ${userRating?.rating_score} poeng`}</p>
+              {userRatingByBookId?.rating_score ? (
+                <p className="italic text-center text-black">{`Du har allerede gitt denne ${userRatingByBookId?.rating_score} poeng`}</p>
               ) : (
                 ""
               )}
-              <div className="self-center min-w-[50px] text-center bg-slate-600 p-1 rounded-lg">{userRatingScore}</div>
+              <div className="self-center min-w-[50px] text-center bg-slate-400 p-1 rounded-lg">{userRatingScore}</div>
               <input
                 type="range"
                 min={0}
@@ -118,7 +118,7 @@ export const BookDetails = ({ session }: Props) => {
                 {...register("rating_score")}
                 onChange={(e) => setUserRatingScore(e.target.value)}
               />
-              <button className="bg-red-600 mt-auto p-4 rounded-lg">{userRating ? "Endre min rating" : "Gi rating"}</button>
+              <button className="bg-red-600 mt-auto p-4 rounded-lg">{userRatingByBookId ? "Endre min rating" : "Gi rating"}</button>
             </form>
           )}
         </div>

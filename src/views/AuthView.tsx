@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { supabase } from "./supabaseClient";
+import { supabase } from "../supabaseClient";
 
-export default function Auth() {
+export default function AuthView() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
 
@@ -14,7 +14,7 @@ export default function Auth() {
     if (error) {
       alert(error.message);
     } else {
-      alert("Check your email for the login link!");
+      alert("Login link sendt til e-post!");
     }
     setLoading(false);
   };

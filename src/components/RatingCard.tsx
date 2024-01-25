@@ -14,11 +14,11 @@ export const RatingCard = ({ book }: Props) => {
         </div>
         <div className="flex flex-col w-full">
           <div className="flex-1">
-            <p className="font-semibold">{book.book_title}</p>
-            <p className="italic text-sm mt-2">Av {book.author_name}</p>
+            <p className="font-semibold text-xl">{book.book_title}</p>
+            <p className="italic text-sm mt-2">{book.author_name}</p>
           </div>
           <div className="flex justify-center">
-            <span className="p-2 w-16 flex justify-center bg-white rounded-full text-black font-bold">{book.rating_score}</span>
+            <span className="p-2 w-full flex justify-center bg-slate-500 rounded-md text-white font-bold">{book.rating_score}</span>
           </div>
         </div>
       </div>
