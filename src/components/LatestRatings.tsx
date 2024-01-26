@@ -1,3 +1,4 @@
+import { ClipLoader } from "react-spinners";
 import { useGetAllRatings } from "../hooks/useGetAllRatings";
 import { LatestRatingsCard } from "./LatestRatingsCard";
 
@@ -7,6 +8,11 @@ export const LatestRatings = () => {
   return (
     <div className="w-full max-w-xs mt-6 text-white mb-12">
       <h3 className="text-xl font-semibold">Nyeste ratings:</h3>
+      {isLoading && (
+        <div className="flex w-full justify-center mt-12">
+          <ClipLoader />
+        </div>
+      )}
       {ratings && !isLoading && (
         <div className="flex flex-col gap-4 mt-4">
           {ratings.map((rating) => (

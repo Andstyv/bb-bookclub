@@ -7,14 +7,17 @@ export const useGetAllRatings = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchAllRatings = async () => {
-      setIsLoading(true);
-      const { data } = await supabase.from("ratings").select().order("created_at", { ascending: false });
-      if (data) {
-        setIsLoading(false);
-        setRatings(data);
+      const { data, error } = await supabase.from("ratings").select().order("created_at", { ascending: false });
+      if (error) {
+        console.log(error);
+        return;
       }
+      setRatings(data);
+      setIsLoading(false);
     };
+
     fetchAllRatings();
   }, []);
 
