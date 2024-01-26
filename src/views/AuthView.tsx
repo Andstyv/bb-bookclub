@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { supabase } from "../supabaseClient";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function AuthView() {
   const [loading, setLoading] = useState(false);
@@ -12,9 +13,12 @@ export default function AuthView() {
     const { error } = await supabase.auth.signInWithOtp({ email });
 
     if (error) {
-      alert(error.message);
+      toast.error(error.message);
     } else {
-      alert("Login link sendt til e-post!");
+      toast.success(`Sjekk e-post for innloggingslenke`, {
+        duration: 5000,
+        position: "bottom-center",
+      });
     }
     setLoading(false);
   };
@@ -41,6 +45,7 @@ export default function AuthView() {
           </div>
         </form>
       </div>
+      <Toaster />
     </div>
   );
 }

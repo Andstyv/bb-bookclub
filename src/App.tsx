@@ -32,7 +32,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <HomeView />,
+          element: <HomeView session={session} />,
         },
         {
           path: "/profil",

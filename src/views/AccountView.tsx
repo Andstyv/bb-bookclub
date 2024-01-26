@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../supabaseClient";
 import { Session } from "@supabase/supabase-js";
 import { FieldValues, useForm } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
 
 type FormValues = {
   username: string;
@@ -57,7 +58,12 @@ export default function AccountView({ session }: SessionProps) {
 
     if (error) {
       alert(error.message);
+      return;
     }
+    toast.success(`Brukernavn ${username ? "oppdatert" : "registrert"}`, {
+      duration: 3000,
+      position: "bottom-center",
+    });
     setLoading(false);
   }
 
@@ -65,7 +71,7 @@ export default function AccountView({ session }: SessionProps) {
     <>
       <div className="flex flex-col items-center text-white mt-12">
         <div className="bg-[#393848] p-8 rounded shadow-md w-full max-w-xl">
-          <h1 className="text-2xl font-semibold mb-6">{username ? "Din Profil" : "Legg til brukernavn"}</h1>
+          <h1 className="text-center text-2xl font-semibold mb-6">{username ? "Din Profil" : "Legg til brukernavn"}</h1>
           <div className="flex justify-center items-center my-4">
             {avatar ? <img src={avatar} className="w-24 h-24" /> : <div className="w-24 h-24 bg-slate-200 rounded-full"></div>}
           </div>
@@ -103,6 +109,7 @@ export default function AccountView({ session }: SessionProps) {
           </form>
         </div>
       </div>
+      <Toaster />
     </>
   );
 }
