@@ -69,11 +69,11 @@ export default function AccountView({ session }: SessionProps) {
 
   return (
     <>
-      <div className="flex flex-col items-center text-white mt-12">
-        <div className="bg-[#393848] p-8 rounded shadow-md w-full max-w-xl">
+      <div className="flex flex-col items-center text-white mt-12 w-full max-w-sm">
+        <div className="bg-bb_primary p-8 rounded shadow-md w-full max-w-xl">
           <h1 className="text-center text-2xl font-semibold mb-6">{username ? "Din Profil" : "Legg til brukernavn"}</h1>
           <div className="flex justify-center items-center my-4">
-            {avatar ? <img src={avatar} className="w-24 h-24" /> : <div className="w-24 h-24 bg-slate-200 rounded-full"></div>}
+            {avatar ? <img src={avatar} className="w-24 h-24" /> : <div className="w-24 h-24 bg-bb_secondary rounded-full"></div>}
           </div>
           <form onSubmit={handleSubmit(updateProfile)}>
             <div className="mb-4">
@@ -99,10 +99,11 @@ export default function AccountView({ session }: SessionProps) {
                 required
                 defaultValue={username || ""}
                 {...register("username")}
+                maxLength={14}
               />
             </div>
             <div className="flex justify-center">
-              <button className="py-2 px-2 rounded-lg bg-yellow-600 font-bold" type="submit" disabled={loading}>
+              <button className="py-2 px-2 rounded-lg bg-bb_btn hover:brightness-110 transition-all font-bold" type="submit" disabled={loading}>
                 {loading ? "Laster ..." : username ? "Oppdater informasjon" : "Opprett brukernavn"}
               </button>
             </div>

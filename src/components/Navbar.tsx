@@ -20,7 +20,7 @@ export const Navbar = ({ session, avatar }: Props) => {
       <div className="justify-between px-4 flex max-w-2xl m-auto text-white pt-8">
         <div className="min-w-20 flex">
           {session && (
-            <Link to={"/profil"} className="w-12 h-12 bg-red-300 rounded-full" onClick={() => setShowHamburgerMenu(false)}>
+            <Link to={"/profil"} className="w-12 h-12 bg-bb_secondary rounded-full" onClick={() => setShowHamburgerMenu(false)}>
               <img src={avatar || ""} />
             </Link>
           )}
@@ -31,11 +31,14 @@ export const Navbar = ({ session, avatar }: Props) => {
           </Link>
         </div>
         <div className="flex items-center justify-end min-w-20">
-          <button className="ml-2 text-4xl" onClick={session ? () => setShowHamburgerMenu(!showHamburgerMenu) : undefined}>
+          <button
+            className={`ml-2 text-4xl ${showHamburgerMenu ? "rotate-90 transition-all" : "transition-all"}`}
+            onClick={session ? () => setShowHamburgerMenu(!showHamburgerMenu) : undefined}
+          >
             {session ? (
               "🍔"
             ) : (
-              <Link to={"/profil"} className="font-bold text-xs p-1 bg-slate-500 rounded-lg">
+              <Link to={"/profil"} className="font-bold text-xs p-1 bg-bb_secondary hover:brightness-110 rounded-lg">
                 Logg inn
               </Link>
             )}
@@ -43,19 +46,19 @@ export const Navbar = ({ session, avatar }: Props) => {
         </div>
       </div>
       {showHamburgerMenu && (
-        <div className="absolute w-full h-full bg-[#272736] z-10">
+        <div className="absolute w-full h-full bg-bb_bg z-10">
           <ul className="text-white font-bold px-2 flex flex-col justify-center items-center mt-20 gap-12">
             <li>
               <Link
                 to={"/mine-ratinger"}
                 onClick={() => setShowHamburgerMenu(false)}
-                className=" line hover:text-yellow-400 transition-all pb-1 border-b-2"
+                className=" line hover:text-bb_secondary transition-all pb-1 border-b-2"
               >
                 Mine ratinger
               </Link>
             </li>
             <li>
-              <button className="transition-all hover:scale-110 p-2 bg-slate-500 rounded-lg" onClick={session ? logOut : undefined}>
+              <button className="transition-all hover:scale-110 hover:brightness-110 p-2 bg-bb_btn rounded-lg" onClick={session ? logOut : undefined}>
                 {session ? "Logg ut" : ""}
               </button>
             </li>

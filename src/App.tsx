@@ -52,7 +52,7 @@ function App() {
 
   return (
     <>
-      <div className="App bg-[#272736]">
+      <div className="App bg-bb_bg font-mono">
         <RouterProvider router={router} />
       </div>
     </>

@@ -25,8 +25,8 @@ export default function AuthView() {
 
   return (
     <div className="row flex flex-center mt-24">
-      <div className="border p-8 bg-slate-200 rounded-lg">
-        <h1 className="font-bold text-2xl text-center">Logg inn / opprett bruker</h1>
+      <div className="p-8 bg-bb_primary rounded-lg">
+        <h1 className="font-bold text-2xl text-center text-white">Logg inn / opprett bruker</h1>
         <form className="" onSubmit={handleLogin}>
           <div>
             <input
@@ -39,7 +39,7 @@ export default function AuthView() {
             />
           </div>
           <div className="w-full flex justify-center mt-8">
-            <button className="bg-red-200 p-2 rounded-lg" disabled={loading}>
+            <button className="bg-bb_secondary text-white font-semibold p-2 rounded-lg" disabled={loading}>
               {loading ? <span>Laster</span> : <span>Bekreft</span>}
             </button>
           </div>

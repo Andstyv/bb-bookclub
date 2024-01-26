@@ -93,7 +93,9 @@ export const DetailedBookView = ({ session }: Props) => {
               <p className="text-[#9797b0]">{currentBook.author}</p>
             </div>
             <div className="flex items-center">
-              <span className="w-12 h-12 bg-slate-500 flex justify-center items-center rounded-full text-xl">{avgRatingByBookId || "-"}</span>
+              <span className="w-12 h-12 bg-bb_btn flex justify-center items-center rounded-full text-xl font-semibold">
+                {avgRatingByBookId || "-"}
+              </span>
             </div>
           </div>
           <div className="flex flex-col">
@@ -102,26 +104,26 @@ export const DetailedBookView = ({ session }: Props) => {
           </div>
           {!isLoading && session && (
             <form
-              className="card-body p-4 my-8 rounded-lg bg-slate-400 flex flex-col gap-4"
+              className="card-body p-4 my-8 rounded-lg bg-bb_primary flex flex-col gap-4"
               onSubmit={handleSubmit(userRatingByBookId ? updateBookRating : addNewBookRating)}
             >
               {userRatingByBookId?.rating_score ? (
-                <p className="italic text-center text-black">{`Du har allerede gitt denne ${userRatingByBookId?.rating_score} poeng`}</p>
+                <p className="italic text-center text-white">{`Du har allerede gitt denne ${userRatingByBookId?.rating_score} poeng`}</p>
               ) : (
                 ""
               )}
-              <div className="self-center min-w-[50px] text-center bg-slate-500 p-1 rounded-lg">{userRatingScore}</div>
+              <div className="self-center min-w-[50px] text-center bg-bb_bg p-1 rounded-lg">{userRatingScore}</div>
               <input
                 type="range"
                 min={0}
                 max={10}
                 defaultValue={5}
-                className="range"
+                className="range cursor-pointer"
                 step={1}
                 {...register("rating_score")}
                 onChange={(e) => setUserRatingScore(e.target.value)}
               />
-              <button className="bg-[#EB2516] mt-auto hover:bg-[#eb2416dc] p-4 rounded-lg">
+              <button className="bg-bb_secondary mt-auto hover:brightness-110 p-4 rounded-lg">
                 {userRatingByBookId ? "Endre min rating" : "Gi rating"}
               </button>
             </form>
