@@ -70,44 +70,49 @@ export default function AccountView({ session }: SessionProps) {
   return (
     <>
       <div className="flex flex-col items-center text-white mt-12 w-full max-w-sm">
-        <div className="bg-bb_primary p-8 rounded shadow-md w-full max-w-xl">
-          <h1 className="text-center text-2xl font-semibold mb-6">{username ? "Din Profil" : "Legg til brukernavn"}</h1>
-          <div className="flex justify-center items-center my-4">
-            {avatar ? <img src={avatar} className="w-24 h-24" /> : <div className="w-24 h-24 bg-bb_secondary rounded-full"></div>}
-          </div>
-          <form onSubmit={handleSubmit(updateProfile)}>
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-bold mb-2">
-                E-post
-              </label>
-              <input
-                id="email"
-                type="text"
-                className=" italic text-gray-600 border rounded px-3 py-2 w-full focus:outline-none bg-gray-200"
-                value={session.user.email}
-                disabled
-              />
-            </div>
-            <div className="mb-6">
-              <label htmlFor="username" className="block text-sm font-bold mb-2">
-                Brukernavn
-              </label>
-              <input
-                id="username"
-                type="text"
-                className="text-black border rounded px-3 py-2 w-full focus:outline-none "
-                required
-                defaultValue={username || ""}
-                {...register("username")}
-                maxLength={14}
-              />
-            </div>
-            <div className="flex justify-center">
-              <button className="py-2 px-2 rounded-lg bg-bb_btn hover:brightness-110 transition-all font-bold" type="submit" disabled={loading}>
-                {loading ? "Laster ..." : username ? "Oppdater informasjon" : "Opprett brukernavn"}
-              </button>
-            </div>
-          </form>
+        <div className="bg-bb_primary p-8 rounded shadow-md w-full max-w-xl min-h-96">
+          {loading && <div className="text-center mt-20">Laster..</div>}
+          {!loading && (
+            <>
+              <h1 className="text-center text-2xl font-semibold mb-6">{username ? "Din Profil" : "Legg til brukernavn"}</h1>
+              <div className="flex justify-center items-center my-4">
+                {avatar ? <img src={avatar} className="w-24 h-24" /> : <div className="w-24 h-24 bg-bb_secondary rounded-full"></div>}
+              </div>
+              <form onSubmit={handleSubmit(updateProfile)}>
+                <div className="mb-4">
+                  <label htmlFor="email" className="block text-sm font-bold mb-2">
+                    E-post
+                  </label>
+                  <input
+                    id="email"
+                    type="text"
+                    className=" italic text-gray-600 border rounded px-3 py-2 w-full focus:outline-none bg-gray-200"
+                    value={session.user.email}
+                    disabled
+                  />
+                </div>
+                <div className="mb-6">
+                  <label htmlFor="username" className="block text-sm font-bold mb-2">
+                    Brukernavn
+                  </label>
+                  <input
+                    id="username"
+                    type="text"
+                    className="text-black border rounded px-3 py-2 w-full focus:outline-none "
+                    required
+                    defaultValue={username || ""}
+                    {...register("username")}
+                    maxLength={14}
+                  />
+                </div>
+                <div className="flex justify-center">
+                  <button className="py-2 px-2 rounded-lg bg-bb_btn hover:brightness-110 transition-all font-bold" type="submit" disabled={loading}>
+                    {loading ? "Laster ..." : username ? "Oppdater informasjon" : "Opprett brukernavn"}
+                  </button>
+                </div>
+              </form>
+            </>
+          )}
         </div>
       </div>
       <Toaster />
