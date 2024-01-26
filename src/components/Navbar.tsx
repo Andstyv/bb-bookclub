@@ -46,12 +46,16 @@ export const Navbar = ({ session, avatar }: Props) => {
         <div className="absolute w-full h-full bg-[#272736] z-10">
           <ul className="text-white font-bold px-2 flex flex-col justify-center items-center mt-20 gap-12">
             <li>
-              <Link to={"/mine-ratinger"} onClick={() => setShowHamburgerMenu(false)} className="pb-1 border-b-2">
+              <Link
+                to={"/mine-ratinger"}
+                onClick={() => setShowHamburgerMenu(false)}
+                className=" line hover:text-yellow-400 transition-all pb-1 border-b-2"
+              >
                 Mine ratinger
               </Link>
             </li>
             <li>
-              <button className="p-2 bg-slate-500 rounded-lg" onClick={session ? logOut : undefined}>
+              <button className="transition-all hover:scale-110 p-2 bg-slate-500 rounded-lg" onClick={session ? logOut : undefined}>
                 {session ? "Logg ut" : ""}
               </button>
             </li>

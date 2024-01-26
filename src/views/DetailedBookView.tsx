@@ -110,18 +110,20 @@ export const DetailedBookView = ({ session }: Props) => {
               ) : (
                 ""
               )}
-              <div className="self-center min-w-[50px] text-center bg-slate-400 p-1 rounded-lg">{userRatingScore}</div>
+              <div className="self-center min-w-[50px] text-center bg-slate-500 p-1 rounded-lg">{userRatingScore}</div>
               <input
                 type="range"
                 min={0}
                 max={10}
                 defaultValue={5}
                 className="range"
-                step={0.5}
+                step={1}
                 {...register("rating_score")}
                 onChange={(e) => setUserRatingScore(e.target.value)}
               />
-              <button className="bg-red-600 mt-auto p-4 rounded-lg">{userRatingByBookId ? "Endre min rating" : "Gi rating"}</button>
+              <button className="bg-[#EB2516] mt-auto hover:bg-[#eb2416dc] p-4 rounded-lg">
+                {userRatingByBookId ? "Endre min rating" : "Gi rating"}
+              </button>
             </form>
           )}
         </div>

@@ -1,30 +1,33 @@
 import { Duration } from "date-fns";
 import { Link } from "react-router-dom";
+import { useGetBookById } from "../hooks/useGetBookById";
 
 type Props = {
-  currentBookId: number;
+  currentBookId: string;
   daysLeft: Duration;
 };
 
 export const CurrentBook = ({ currentBookId, daysLeft }: Props) => {
+  const { book } = useGetBookById(currentBookId);
+
   return (
     <>
-      <div className="w-full flex flex-col gap-2 text-white mt-10">
-        <h1 className="text-2xl mb-1 font-semibold">Nå leses:</h1>
-        <Link
-          to={`detaljer/${currentBookId}`}
-          className="cursor-pointer bg-[url(https://m.media-amazon.com/images/I/91EQ0zyctlL._AC_UF1000,1000_QL80_.jpg)] bg-cover bg-no-repeat h-80 w-full rounded-xl bg-"
-        >
-          <div className="text-black flex flex-col justify-end h-full">
-            <div className="pb-4 pl-4 bg-gradient-to-b from-transparent to-black py-8 text-white rounded-xl">
-              <p className="text-2xl font-semibold">Rendezvous with Rama</p>
-              <p>Arthur C. Clarke</p>
+      {book && (
+        <div className="w-full max-w-xs flex flex-col gap-2 text-white mt-10">
+          <h1 className="text-2xl mb-1 font-semibold">Nå leses:</h1>
+          <Link to={`detaljer/${book.id}`} className={`cursor-pointer`}>
+            <img src={book.cover_img_url} className="object-cover object-top w-full h-64" />
+            <div className="flex flex-col justify-end h-full">
+              <div className="py-2 bg-slate-600 pl-4 rounded-t-none text-white rounded-xl">
+                <p className="text-2xl font-semibold">{book.title}</p>
+                <p>{book.author}</p>
+              </div>
             </div>
-          </div>
-        </Link>
-        <h2 className="mt-2 text-xl text-center mb-0">Gjenstående tid:</h2>
-        <div className="bg-slate-500 rounded-lg flex justify-center py-2 px-4 font-semibold text-lg m-auto">{daysLeft.days} dager</div>
-      </div>
+          </Link>
+          <h2 className="mt-2 text-xl text-center mb-0">Gjenstående tid:</h2>
+          <div className="bg-slate-500 rounded-lg flex justify-center py-2 px-4 font-semibold text-lg m-auto">{daysLeft.days} dager</div>
+        </div>
+      )}
     </>
   );
 };
