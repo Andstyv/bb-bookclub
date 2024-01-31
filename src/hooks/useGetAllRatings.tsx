@@ -4,10 +4,10 @@ import { Rating } from "../types/types";
 
 export const useGetAllRatings = () => {
   const [ratings, setRatings] = useState<Rating[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingAllRatings, setIstLoadingAllRatings] = useState<boolean>(false);
 
   useEffect(() => {
-    setIsLoading(true);
+    setIstLoadingAllRatings(true);
     const fetchAllRatings = async () => {
       const { data, error } = await supabase.from("ratings").select().order("created_at", { ascending: false });
       if (error) {
@@ -15,11 +15,11 @@ export const useGetAllRatings = () => {
         return;
       }
       setRatings(data);
-      setIsLoading(false);
+      setIstLoadingAllRatings(false);
     };
 
     fetchAllRatings();
   }, []);
 
-  return { ratings, isLoading };
+  return { ratings, isLoadingAllRatings };
 };

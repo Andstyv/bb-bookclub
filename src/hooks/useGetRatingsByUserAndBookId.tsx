@@ -14,6 +14,7 @@ export const useGetRatingByUserAndBookId = ({ session, id }: Props) => {
 
   useEffect(() => {
     let ignore = false;
+    if (!session) return;
 
     const fetchRatingByUserAndBookId = async () => {
       setIsLoading(true);

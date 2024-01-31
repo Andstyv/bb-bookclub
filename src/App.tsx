@@ -15,6 +15,7 @@ function App() {
   const { userData } = useGetUser({ session });
 
   const AppLayout = () => {
+    console.log("Using app layout");
     return (
       <>
         <Navbar session={session ?? undefined} avatar={userData?.avatar_url || undefined} />
@@ -36,15 +37,15 @@ function App() {
         },
         {
           path: "/profil",
-          element: session && !loadingSession ? <Account session={session ?? undefined} /> : <Auth />,
+          element: session && !loadingSession ? <Account session={session} /> : <Auth />,
         },
         {
           path: "detaljer/:id",
-          element: <DetailedBookView session={session ?? undefined} />,
+          element: <DetailedBookView session={session} />,
         },
         {
           path: "/mine-ratinger",
-          element: <MyBookRatingsView session={session ?? undefined} loadingSession={loadingSession} />,
+          element: <MyBookRatingsView session={session} loadingSession={loadingSession} />,
         },
       ],
     },

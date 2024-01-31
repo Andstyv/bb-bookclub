@@ -1,25 +1,19 @@
-import { ClipLoader } from "react-spinners";
-import { useGetAllRatings } from "../hooks/useGetAllRatings";
+import { Rating } from "../types/types";
 import { LatestRatingsCard } from "./LatestRatingsCard";
 
-export const LatestRatings = () => {
-  const { ratings, isLoading } = useGetAllRatings();
+type Props = {
+  ratings: Rating[];
+};
 
+export const LatestRatings = ({ ratings }: Props) => {
   return (
     <div className="w-full max-w-xs mt-6 text-white mb-12">
       <h3 className="text-xl font-semibold">Nyeste ratings:</h3>
-      {isLoading && (
-        <div className="flex w-full justify-center mt-12">
-          <ClipLoader />
-        </div>
-      )}
-      {ratings && !isLoading && (
-        <div className="flex flex-col gap-4 mt-4">
-          {ratings.map((rating) => (
-            <LatestRatingsCard rating={rating} key={rating.id} />
-          ))}
-        </div>
-      )}
+      <div className="flex flex-col gap-4 mt-4">
+        {ratings.slice(0, 5).map((rating) => (
+          <LatestRatingsCard rating={rating} key={rating.id} />
+        ))}
+      </div>
     </div>
   );
 };

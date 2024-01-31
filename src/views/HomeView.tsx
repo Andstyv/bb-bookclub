@@ -5,6 +5,7 @@ import { currentBookId, daysLeft } from "../constants/currentBookInfo";
 import { useNavigate } from "react-router-dom";
 import { Session } from "@supabase/supabase-js";
 import { useGetUser } from "../hooks/useGetUser";
+import { useGetAllRatings } from "../hooks/useGetAllRatings";
 
 type Props = {
   session?: Session;
@@ -12,6 +13,7 @@ type Props = {
 
 export const HomeView = ({ session }: Props) => {
   const { userData } = useGetUser({ session });
+  const { ratings, isLoadingAllRatings } = useGetAllRatings();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +25,7 @@ export const HomeView = ({ session }: Props) => {
   return (
     <>
       <CurrentBook currentBookId={currentBookId} daysLeft={daysLeft} />
-      <LatestRatings />
+      {ratings && !isLoadingAllRatings && <LatestRatings ratings={ratings} />}
     </>
   );
 };
