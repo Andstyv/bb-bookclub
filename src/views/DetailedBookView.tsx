@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useGetAvgRatingForBook } from "../hooks/useGetAvgRatingForBook";
 import { Session } from "@supabase/gotrue-js";
 import { useParams } from "react-router-dom";
 import { books } from "../books/books";
@@ -8,6 +7,8 @@ import { useGetRatingByUserAndBookId } from "../hooks/useGetRatingsByUserAndBook
 import { BookRatingForm } from "../components/bookDetails/BookRatingForm";
 import { useGetUser } from "../hooks/useGetUser";
 import { BookRatings } from "../components/bookDetails/BookRatings";
+import { useSupabase } from "../hooks/useSupabase";
+import { getAvgRatingForBookById } from "../services/supaservice";
 
 type Props = {
   session?: Session;
@@ -16,7 +17,7 @@ type Props = {
 export const DetailedBookView = ({ session }: Props) => {
   const { userData } = useGetUser({ session });
   const { id } = useParams();
-  const { avgRatingByBookId } = useGetAvgRatingForBook(id);
+  const { data: avgRatingByBookId, loading, error } = useSupabase(() => getAvgRatingForBookById(id));
   const { userRatingByBookId, isLoading } = useGetRatingByUserAndBookId({ session, id });
   const [currentBook, setCurrentBook] = useState<Book>();
 
@@ -30,6 +31,15 @@ export const DetailedBookView = ({ session }: Props) => {
       getBookById(id);
     }
   }, [id]);
+
+  if (error) {
+    return (
+      <>
+        <div>An error occured</div>
+        <div>{error.message}</div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -45,7 +55,7 @@ export const DetailedBookView = ({ session }: Props) => {
             </div>
             <div className="flex items-center">
               <span className="w-12 h-12 bg-bb_btn flex justify-center items-center rounded-full text-xl font-semibold">
-                {avgRatingByBookId || "-"}
+                {!loading && avgRatingByBookId?.toString()}
               </span>
             </div>
           </div>

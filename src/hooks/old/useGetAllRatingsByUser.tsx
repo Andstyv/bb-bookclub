@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
-import { supabase } from "../supabaseClient";
-import { Rating } from "../types/types";
+import { supabase } from "../../supabaseClient";
+import { Rating } from "../../types/types";
 
 type Props = {
   session?: Session | null;
