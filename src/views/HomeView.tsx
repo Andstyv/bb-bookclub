@@ -5,7 +5,8 @@ import { currentBookId, daysLeft } from "../constants/currentBookInfo";
 import { useNavigate } from "react-router-dom";
 import { Session } from "@supabase/supabase-js";
 import { useGetUser } from "../hooks/useGetUser";
-import { useGetAllRatings } from "../hooks/useGetAllRatings";
+import { useSupabase } from "../hooks/useSupabase";
+import { getAllRatings } from "../services/supaservice";
 
 type Props = {
   session?: Session;
@@ -13,7 +14,7 @@ type Props = {
 
 export const HomeView = ({ session }: Props) => {
   const { userData } = useGetUser({ session });
-  const { ratings, isLoadingAllRatings } = useGetAllRatings();
+  const { loading: isLoadingAllRatings, data: ratings, error } = useSupabase(getAllRatings);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +22,15 @@ export const HomeView = ({ session }: Props) => {
       navigate("/profil");
     }
   }, [userData, navigate]);
+
+  if (error) {
+    return (
+      <>
+        <div>An error occured</div>
+        <div>{error.message}</div>
+      </>
+    );
+  }
 
   return (
     <>

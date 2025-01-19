@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../supabaseClient";
-import { Rating } from "../types/types";
+import { supabase } from "../../supabaseClient";
+import { Rating } from "../../types/types";
 
 export const useGetAllRatings = () => {
   const [ratings, setRatings] = useState<Rating[]>([]);
