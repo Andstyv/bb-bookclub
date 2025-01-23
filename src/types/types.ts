@@ -27,3 +27,10 @@ export type Book = {
   description: string;
   cover_img_url: string;
 };
+
+export type LoginError = {
+  data: {
+    status: number;
+    message: string;
+  };
+};

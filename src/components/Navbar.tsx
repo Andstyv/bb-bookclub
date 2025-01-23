@@ -1,25 +1,31 @@
-import { Session } from "@supabase/supabase-js";
 import { Link } from "react-router-dom";
-import { supabase } from "../supabaseClient";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getPb } from "../utils/pocketBaseUtils";
 
 type Props = {
-  session?: Session;
   avatar?: string;
 };
 
-export const Navbar = ({ session, avatar }: Props) => {
+export const Navbar = ({ avatar }: Props) => {
   const [showHamburgerMenu, setShowHamburgerMenu] = useState<boolean>(false);
+  const pb = getPb();
+  const isLoggedIn = pb.authStore.isValid;
+  const [logoutDummy, setLogoutDummy] = useState(0);
+
+  useEffect(() => {
+    setLogoutDummy((prev) => prev + 1);
+  }, []);
 
   const logOut = () => {
-    supabase.auth.signOut();
+    pb.authStore.clear();
+    setLogoutDummy(1);
   };
 
   return (
     <>
       <div className="justify-between px-4 flex max-w-2xl m-auto text-white pt-8">
         <div className="min-w-20 flex">
-          {session && (
+          {isLoggedIn && (
             <Link to={"/profil"} className="w-12 h-12 bg-bb_secondary rounded-full" onClick={() => setShowHamburgerMenu(false)}>
               <img src={avatar || ""} />
             </Link>
@@ -33,9 +39,9 @@ export const Navbar = ({ session, avatar }: Props) => {
         <div className="flex items-center justify-end min-w-20">
           <button
             className={`ml-2 text-4xl ${showHamburgerMenu ? "rotate-90 transition-all" : "transition-all"}`}
-            onClick={session ? () => setShowHamburgerMenu(!showHamburgerMenu) : undefined}
+            onClick={isLoggedIn ? () => setShowHamburgerMenu(!showHamburgerMenu) : undefined}
           >
-            {session ? (
+            {isLoggedIn ? (
               "🍔"
             ) : (
               <Link to={"/profil"} className="font-bold text-xs p-1 bg-bb_secondary hover:brightness-110 rounded-lg">
@@ -58,8 +64,11 @@ export const Navbar = ({ session, avatar }: Props) => {
               </Link>
             </li>
             <li>
-              <button className="transition-all hover:scale-110 hover:brightness-110 p-2 bg-bb_btn rounded-lg" onClick={session ? logOut : undefined}>
-                {session ? "Logg ut" : ""}
+              <button
+                className="transition-all hover:scale-110 hover:brightness-110 p-2 bg-bb_btn rounded-lg"
+                onClick={isLoggedIn ? logOut : undefined}
+              >
+                {isLoggedIn ? "Logg ut" : ""}
               </button>
             </li>
           </ul>

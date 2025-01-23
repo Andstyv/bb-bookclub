@@ -7,6 +7,7 @@ import { Session } from "@supabase/supabase-js";
 import { useGetUser } from "../hooks/useGetUser";
 import { useSupabase } from "../hooks/useSupabase";
 import { getAllRatings } from "../services/supaservice";
+import { getPb } from "../utils/pocketBaseUtils";
 
 type Props = {
   session?: Session;
@@ -15,6 +16,7 @@ type Props = {
 export const HomeView = ({ session }: Props) => {
   const { userData } = useGetUser({ session });
   const { loading: isLoadingAllRatings, data: ratings, error } = useSupabase(getAllRatings);
+  const pb = getPb();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +28,7 @@ export const HomeView = ({ session }: Props) => {
   if (error) {
     return (
       <>
+        <div>{pb.authStore.isValid ? "TRUE" : "FALSE"}</div>
         <div>An error occured</div>
         <div>{error.message}</div>
       </>
