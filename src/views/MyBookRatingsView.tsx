@@ -1,43 +1,29 @@
 import { RatingCard } from "../components/RatingCard";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Session } from "@supabase/supabase-js";
-import { useSupabase } from "../hooks/useSupabase";
-import { getAllRatingsByUserId, getAllRatingsByUserId2 } from "../services/supaservice";
 import { Rating } from "../types/types";
-import { list } from "postcss";
+import { getAllRatingsByUserIdPocket } from "../services/pocketservice";
+import { AuthRecord } from "pocketbase";
+import { usePocketBase } from "../hooks/usePocketbase";
 
 type Props = {
-  session?: Session;
+  session?: AuthRecord;
   loadingSession: boolean | null;
 };
 
-export const MyBookRatingsView = ({ session, loadingSession }: Props) => {
-  // const { data: allRatingsByUser, loading, error } = useSupabase(() => getAllRatingsByUserId(session?.user.id));
-  const allRatingsByUser = useSupabase(() => getAllRatingsByUserId2());
-  const navigate = useNavigate();
+export const MyBookRatingsView = ({ session }: Props) => {
+  const { loading, data: allRatingsByUser, error } = usePocketBase(() => getAllRatingsByUserIdPocket(session?.id));
 
-  // useEffect(() => {
-  //   if (!session && !loadingSession) {
-  //     navigate("/");
-  //   }
-  // }, [session, loadingSession, navigate]);
+  if (loading) return <div>Loading...</div>;
+  if (error) {
+    console.log(error);
+    return <div>Error loading data</div>;
+  }
 
-  // if (error) {
-  //   return (
-  //     <>
-  //       <div>An error occured</div>
-  //       <div>{error.message}</div>
-  //     </>
-  //   );
-  // }
-
-  console.log(allRatingsByUser);
+  const ratings = allRatingsByUser || [];
 
   return (
     <div className="w-full flex flex-col gap-4 mt-20">
       <h1 className="font-bold text-2xl text-white">Mine ratinger:</h1>
-      {allRatingsByUser && allRatingsByUser.map((book: Rating) => <RatingCard key={book.id} book={book} />)}
+      {ratings.length > 0 ? ratings.map((book: Rating) => <RatingCard key={book.id} book={book} />) : <div>No ratings found</div>}
     </div>
   );
 };

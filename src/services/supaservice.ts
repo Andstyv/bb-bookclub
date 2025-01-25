@@ -25,7 +25,7 @@ export const getAllRatingsByUserId2 = async () => {
   return list.items;
 };
 
-export const getAvgRatingForBookById = async (bookId: string | undefined) => {
+export const getAvgRatingForBookByIdPocketOld = async (bookId: string | undefined) => {
   const pb = getPb();
   const list = await pb.collection("ratings").getList(1, 100, {
     filter: `book_id = ${bookId}`,

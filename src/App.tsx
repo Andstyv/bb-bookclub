@@ -9,10 +9,13 @@ import { HomeView } from "./views/HomeView";
 import { useGetUser } from "./hooks/useGetUser";
 import { DetailedBookView } from "./views/DetailedBookView";
 import { MyBookRatingsView } from "./views/MyBookRatingsView";
+import { getPb } from "./utils/pocketBaseUtils";
 
 function App() {
   const { session, loadingSession } = useGetSession();
   const { userData } = useGetUser({ session });
+  const pb = getPb();
+  const user = pb.authStore.record;
 
   const AppLayout = () => {
     console.log("Using app layout");
@@ -33,7 +36,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <HomeView session={session} />,
+          element: <HomeView session={user} />,
         },
         {
           path: "/profil",
@@ -41,11 +44,11 @@ function App() {
         },
         {
           path: "detaljer/:id",
-          element: <DetailedBookView session={session} />,
+          element: <DetailedBookView session={user} />,
         },
         {
           path: "/mine-ratinger",
-          element: <MyBookRatingsView session={session} loadingSession={loadingSession} />,
+          element: <MyBookRatingsView session={user} loadingSession={loadingSession} />,
         },
       ],
     },

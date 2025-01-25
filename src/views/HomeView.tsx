@@ -3,41 +3,43 @@ import { CurrentBook } from "../components/CurrentBook";
 import { LatestRatings } from "../components/LatestRatings";
 import { currentBookId, daysLeft } from "../constants/currentBookInfo";
 import { useNavigate } from "react-router-dom";
-import { Session } from "@supabase/supabase-js";
-import { useGetUser } from "../hooks/useGetUser";
-import { getPb } from "../utils/pocketBaseUtils";
-import { ratings } from "../books/ratings";
+import { AuthRecord } from "pocketbase";
+import { getAllRatingsPocket } from "../services/pocketservice";
+import { usePocketBase } from "../hooks/usePocketbase";
 
 type Props = {
-  session?: Session;
+  session?: AuthRecord;
 };
 
 export const HomeView = ({ session }: Props) => {
-  const { userData } = useGetUser({ session });
-  // const { loading: isLoadingAllRatings, data: ratings, error } = useSupabase(getAllRatings);
-  const pb = getPb();
-  console.log(pb.authStore.record);
   const navigate = useNavigate();
+  const { loading, data: allRatings, error } = usePocketBase(() => getAllRatingsPocket());
 
   useEffect(() => {
-    if (userData && !userData.username) {
+    if (session && !session.id) {
       navigate("/profil");
     }
-  }, [userData, navigate]);
+  }, [session, navigate]);
 
-  // if (error) {
-  //   return (
-  //     <>
-  //       <div>An error occured</div>
-  //       <div>{error.message}</div>
-  //     </>
-  //   );
-  // }
+  if (loading) {
+    return <p>Loading..</p>;
+  }
+
+  if (error) {
+    return (
+      <>
+        <div>An error occured</div>
+        <div>{error.message}</div>
+      </>
+    );
+  } else {
+    console.log(allRatings);
+  }
 
   return (
     <>
       <CurrentBook currentBookId={currentBookId} daysLeft={daysLeft} />
-      {ratings && <LatestRatings ratings={ratings} />}
+      {allRatings && !loading && <LatestRatings ratings={allRatings} />}
     </>
   );
 };
