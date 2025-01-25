@@ -1,0 +1,43 @@
+import { Rating } from "../types/types";
+
+export const ratings: Rating[] = [
+  {
+    id: 1,
+    created_at: new Date("2025-01-20"),
+    user_id: "user_123",
+    username: "booklover99",
+    book_isbn: "978-3-16-148410-0",
+    rating_score: 5,
+    book_title: "The Enchanted Forest",
+    author_name: "Jane Doe",
+    book_id: 101,
+    book_description: "A magical tale of adventure and mystery in an enchanted forest.",
+    book_cover_url: "https://example.com/enchanted_forest_cover.jpg",
+  },
+  {
+    id: 2,
+    created_at: new Date("2025-01-21"),
+    user_id: "user_456",
+    username: "avidreader22",
+    book_isbn: "978-1-56619-909-4",
+    rating_score: 4,
+    book_title: "Ocean of Dreams",
+    author_name: "John Smith",
+    book_id: 102,
+    book_description: "An epic journey across the seas to find a long-lost treasure.",
+    book_cover_url: "https://example.com/ocean_of_dreams_cover.jpg",
+  },
+  {
+    id: 3,
+    created_at: new Date("2025-01-22"),
+    user_id: "user_789",
+    username: "literaturefan",
+    book_isbn: "978-0-395-19395-8",
+    rating_score: 3,
+    book_title: "Chronicles of the Unknown",
+    author_name: "Emily Carter",
+    book_id: 103,
+    book_description: "A gripping mystery that unveils the secrets of an ancient civilization.",
+    book_cover_url: "https://example.com/chronicles_unknown_cover.jpg",
+  },
+];

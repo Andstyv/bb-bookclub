@@ -5,9 +5,8 @@ import { currentBookId, daysLeft } from "../constants/currentBookInfo";
 import { useNavigate } from "react-router-dom";
 import { Session } from "@supabase/supabase-js";
 import { useGetUser } from "../hooks/useGetUser";
-import { useSupabase } from "../hooks/useSupabase";
-import { getAllRatings } from "../services/supaservice";
 import { getPb } from "../utils/pocketBaseUtils";
+import { ratings } from "../books/ratings";
 
 type Props = {
   session?: Session;
@@ -15,8 +14,9 @@ type Props = {
 
 export const HomeView = ({ session }: Props) => {
   const { userData } = useGetUser({ session });
-  const { loading: isLoadingAllRatings, data: ratings, error } = useSupabase(getAllRatings);
+  // const { loading: isLoadingAllRatings, data: ratings, error } = useSupabase(getAllRatings);
   const pb = getPb();
+  console.log(pb.authStore.record);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,20 +25,19 @@ export const HomeView = ({ session }: Props) => {
     }
   }, [userData, navigate]);
 
-  if (error) {
-    return (
-      <>
-        <div>{pb.authStore.isValid ? "TRUE" : "FALSE"}</div>
-        <div>An error occured</div>
-        <div>{error.message}</div>
-      </>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <>
+  //       <div>An error occured</div>
+  //       <div>{error.message}</div>
+  //     </>
+  //   );
+  // }
 
   return (
     <>
       <CurrentBook currentBookId={currentBookId} daysLeft={daysLeft} />
-      {ratings && !isLoadingAllRatings && <LatestRatings ratings={ratings} />}
+      {ratings && <LatestRatings ratings={ratings} />}
     </>
   );
 };

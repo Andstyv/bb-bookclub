@@ -17,7 +17,7 @@ type Props = {
 export const DetailedBookView = ({ session }: Props) => {
   const { userData } = useGetUser({ session });
   const { id } = useParams();
-  const { data: avgRatingByBookId, loading, error } = useSupabase(() => getAvgRatingForBookById(id));
+  const { data: avgRatingByBookId } = useSupabase(() => getAvgRatingForBookById(id));
   const { userRatingByBookId, isLoading } = useGetRatingByUserAndBookId({ session, id });
   const [currentBook, setCurrentBook] = useState<Book>();
 
@@ -31,15 +31,6 @@ export const DetailedBookView = ({ session }: Props) => {
       getBookById(id);
     }
   }, [id]);
-
-  if (error) {
-    return (
-      <>
-        <div>An error occured</div>
-        <div>{error.message}</div>
-      </>
-    );
-  }
 
   return (
     <>
@@ -55,7 +46,7 @@ export const DetailedBookView = ({ session }: Props) => {
             </div>
             <div className="flex items-center">
               <span className="w-12 h-12 bg-bb_btn flex justify-center items-center rounded-full text-xl font-semibold">
-                {!loading && avgRatingByBookId?.toString()}
+                {avgRatingByBookId?.toString()}
               </span>
             </div>
           </div>
