@@ -1,19 +1,18 @@
 import { ContentWrapper } from "./components/ContentWrapper";
-import { useGetSession } from "./hooks/useGetSession";
 import Account from "./views/AccountView";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ErrorPage } from "./components/ErrorPage";
 import Auth from "./views/AuthView";
 import { Navbar } from "./components/Navbar";
 import { HomeView } from "./views/HomeView";
-import { useGetUser } from "./hooks/useGetUser";
+// import { useGetUser } from "./hooks/useGetUser";
 import { DetailedBookView } from "./views/DetailedBookView";
 import { MyBookRatingsView } from "./views/MyBookRatingsView";
 import { getPb } from "./utils/pocketBaseUtils";
 
 function App() {
-  const { session, loadingSession } = useGetSession();
-  const { userData } = useGetUser({ session });
+  // const { session, loadingSession } = useGetSession();
+  // const { userData } = useGetUser({ session });
   const pb = getPb();
   const user = pb.authStore.record;
 
@@ -21,7 +20,7 @@ function App() {
     console.log("Using app layout");
     return (
       <>
-        <Navbar session={session ?? undefined} avatar={userData?.avatar_url || undefined} />
+        <Navbar avatar={user?.avatar_url || undefined} />
         <ContentWrapper>
           <Outlet />
         </ContentWrapper>
@@ -40,7 +39,7 @@ function App() {
         },
         {
           path: "/profil",
-          element: session && !loadingSession ? <Account session={session} /> : <Auth />,
+          element: user ? <Account session={user} /> : <Auth />,
         },
         {
           path: "detaljer/:id",
@@ -48,7 +47,7 @@ function App() {
         },
         {
           path: "/mine-ratinger",
-          element: <MyBookRatingsView session={user} loadingSession={loadingSession} />,
+          element: <MyBookRatingsView session={user} />,
         },
       ],
     },

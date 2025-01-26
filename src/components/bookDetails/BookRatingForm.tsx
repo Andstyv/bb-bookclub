@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { Book, Rating, User } from "../../types/types";
-import { supabase } from "../../supabaseClient";
 import toast, { Toaster } from "react-hot-toast";
-import { Session } from "@supabase/supabase-js";
 import { AuthRecord } from "pocketbase";
 import { getRatingsByUserAndBookIdPocket } from "../../services/pocketservice";
 import { usePocketBase } from "../../hooks/usePocketbase";
@@ -32,8 +30,8 @@ export const BookRatingForm = ({ bookId, session, currentBook, userData }: Props
     const updates = {
       rating_score: parseFloat(formData.rating_score),
     };
-    // const { error } = await supabase.from("ratings").update(updates).eq("user_id", session?.user.id).eq("book_id", currentBook?.id);
-    const record = await pb.collection("ratings").update(`${userRatingByBookId[0].id}`, updates);
+
+    await pb.collection("ratings").update(`${userRatingByBookId[0].id}`, updates);
     if (error) {
       toast.error(error.message, {
         duration: 3000,
@@ -60,7 +58,7 @@ export const BookRatingForm = ({ bookId, session, currentBook, userData }: Props
       book_cover_url: currentBook?.cover_img_url,
     };
 
-    const record = await pb.collection("ratings").create(updates);
+    await pb.collection("ratings").create(updates);
 
     if (error) {
       alert(error.message);

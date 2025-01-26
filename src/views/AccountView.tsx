@@ -3,64 +3,82 @@ import { supabase } from "../supabaseClient";
 import { Session } from "@supabase/supabase-js";
 import { FieldValues, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
+import { getPb } from "../utils/pocketBaseUtils";
+import { AuthRecord } from "pocketbase";
 
 type FormValues = {
   username: string;
 };
 
 type SessionProps = {
-  session: Session;
+  session: AuthRecord;
 };
 
 export default function AccountView({ session }: SessionProps) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState(null);
   const [avatar, setAvatar] = useState(null);
+  // const [dummy, setDummy] = useState(0);
   const { register, handleSubmit } = useForm<FormValues>();
+  const pb = getPb();
 
-  useEffect(() => {
-    let ignore = false;
-    async function getProfile() {
-      setLoading(true);
-      const { user } = session;
-      const { data, error } = await supabase.from("profiles").select(`username, avatar_url`).eq("id", user.id).single();
+  console.log(session);
 
-      if (!ignore) {
-        if (error) {
-          console.warn(error);
-        } else if (data) {
-          setUsername(data.username);
-          setAvatar(data.avatar_url);
-        }
-      }
-      setLoading(false);
-    }
-    getProfile();
+  // useEffect(() => {
+  //   let ignore = false;
+  //   async function getProfile() {
+  //     setLoading(true);
+  //     const { user } = session;
+  //     // const { data, error } = await supabase.from("profiles").select(`username, avatar_url`).eq("id", user.id).single();
 
-    return () => {
-      ignore = true;
-    };
-  }, [session]);
+  //     const record = await pb.collection("users").getOne(`${pb.authStore.record?.id}`, {
+  //       expand: "relField1,relField2.subRelField",
+  //     });
+
+  //     if (!ignore) {
+  //       if (error) {
+  //         console.warn(error);
+  //       } else if (data) {
+  //         setUsername(data.username);
+  //         setAvatar(data.avatar_url);
+  //       }
+  //     }
+  //     setLoading(false);
+  //   }
+  //   getProfile();
+
+  //   return () => {
+  //     ignore = true;
+  //   };
+  // }, [session]);
 
   async function updateProfile(formData: FieldValues) {
     setLoading(true);
-    const { user } = session;
+    // const { user } = session;
     const randomNumber = Math.floor(Math.random() * 99 + 1);
 
-    const updates = {
-      id: user.id,
-      username: formData.username,
-      updated_at: new Date(),
-      avatar_url: `https://avatar.iran.liara.run/public/${randomNumber}`,
+    // const updates = {
+    //   id: session?.id,
+    //   username: formData.username,
+    //   updated_at: new Date(),
+    //   avatar_url: `https://avatar.iran.liara.run/public/${randomNumber}`,
+    // };
+
+    const data = {
+      name: formData.username,
     };
 
-    const { error } = await supabase.from("profiles").upsert(updates);
+    const record = await pb.collection("users").update(`${session?.id}`, data);
 
-    if (error) {
-      alert(error.message);
+    console.log("RECORD", record);
+
+    // const { error } = await supabase.from("profiles").upsert(updates);
+
+    if (record.code) {
+      alert(record.message);
       return;
     }
-    toast.success(`Brukernavn ${username ? "oppdatert" : "registrert"}`, {
+    toast.success(`Brukernavn ${session?.name ? "oppdatert" : "registrert"}`, {
       duration: 3000,
       position: "bottom-center",
     });
@@ -74,7 +92,7 @@ export default function AccountView({ session }: SessionProps) {
           {loading && <div className="text-center mt-20">Laster..</div>}
           {!loading && (
             <>
-              <h1 className="text-center text-2xl font-semibold mb-6">{username ? "Din Profil" : "Legg til brukernavn"}</h1>
+              <h1 className="text-center text-2xl font-semibold mb-6">{session?.name ? "Din Profil" : "Legg til brukernavn"}</h1>
               <div className="flex justify-center items-center my-4">
                 {avatar ? <img src={avatar} className="w-24 h-24" /> : <div className="w-24 h-24 bg-bb_secondary rounded-full"></div>}
               </div>
@@ -87,7 +105,7 @@ export default function AccountView({ session }: SessionProps) {
                     id="email"
                     type="text"
                     className=" italic text-gray-600 border rounded px-3 py-2 w-full focus:outline-none bg-gray-200"
-                    value={session.user.email}
+                    value={session?.email}
                     disabled
                   />
                 </div>
@@ -100,14 +118,14 @@ export default function AccountView({ session }: SessionProps) {
                     type="text"
                     className="text-black border rounded px-3 py-2 w-full focus:outline-none "
                     required
-                    defaultValue={username || ""}
+                    defaultValue={session?.name || ""}
                     {...register("username")}
                     maxLength={14}
                   />
                 </div>
                 <div className="flex justify-center">
                   <button className="py-2 px-2 rounded-lg bg-bb_btn hover:brightness-110 transition-all font-bold" type="submit" disabled={loading}>
-                    {loading ? "Laster ..." : username ? "Oppdater informasjon" : "Opprett brukernavn"}
+                    {loading ? "Laster ..." : session?.name ? "Oppdater informasjon" : "Opprett brukernavn"}
                   </button>
                 </div>
               </form>

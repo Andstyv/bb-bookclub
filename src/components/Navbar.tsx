@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { getPb } from "../utils/pocketBaseUtils";
 
 type Props = {
@@ -10,15 +10,12 @@ export const Navbar = ({ avatar }: Props) => {
   const [showHamburgerMenu, setShowHamburgerMenu] = useState<boolean>(false);
   const pb = getPb();
   const isLoggedIn = pb.authStore.isValid;
-  const [logoutDummy, setLogoutDummy] = useState(0);
-
-  useEffect(() => {
-    setLogoutDummy((prev) => prev + 1);
-  }, []);
+  const navigate = useNavigate();
 
   const logOut = () => {
     pb.authStore.clear();
-    setLogoutDummy(1);
+    navigate("/");
+    setShowHamburgerMenu(false);
   };
 
   return (

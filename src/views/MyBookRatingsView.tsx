@@ -6,7 +6,6 @@ import { usePocketBase } from "../hooks/usePocketbase";
 
 type Props = {
   session?: AuthRecord;
-  loadingSession: boolean | null;
 };
 
 export const MyBookRatingsView = ({ session }: Props) => {
