@@ -5,6 +5,7 @@ interface Props {
 }
 
 export const LatestRatingsCard = ({ rating }: Props) => {
+  console.log(rating);
   return (
     <div className="bg-bb_primary rounded-lg p-4 flex flex-col gap-4">
       <div className="flex justify-between items-center">
@@ -17,7 +18,7 @@ export const LatestRatingsCard = ({ rating }: Props) => {
         </div>
       </div>
       <div className="flex justify-end">
-        <p className="italic">{rating.username}</p>
+        <p className="italic">{rating.expand.user_id.name != "" ? rating.expand.user_id.name : "Ukjent"}</p>
       </div>
     </div>
   );

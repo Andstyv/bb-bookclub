@@ -1,7 +1,5 @@
 import { Rating } from "../types/types";
-import { getPb } from "../utils/pocketBaseUtils";
-
-const pb = getPb();
+import { pb } from "../utils/pocketBaseUtils";
 
 type RatingsResponse = {
   data: Rating[] | number | null;
@@ -40,6 +38,7 @@ export const getBookRatingsByIdPocket = async (bookId?: string): Promise<Ratings
     const records = await pb.collection("ratings").getFullList<Rating>({
       filter: `book_id = '${bookId}'`,
       sort: "-created",
+      expand: "user_id",
     });
 
     return { data: records, error: null };
@@ -51,7 +50,10 @@ export const getBookRatingsByIdPocket = async (bookId?: string): Promise<Ratings
 
 export const getAllRatingsPocket = async (): Promise<RatingsResponse> => {
   try {
-    const records = await pb.collection("ratings").getFullList<Rating>({});
+    const records = await pb.collection("ratings").getFullList<Rating>({
+      sort: "-created",
+      expand: "user_id",
+    });
 
     return { data: records, error: null };
   } catch (error) {
@@ -89,7 +91,7 @@ export const getAvgRatingForBookByIdPocket = async (bookId?: string): Promise<Ra
       if (data && data.items.length > 0) {
         const sum = data.items.reduce((a, { rating_score }) => a + rating_score, 0);
         const avg = sum / data.items.length;
-        return avg;
+        return avg.toFixed(1);
       }
       return 0;
     };

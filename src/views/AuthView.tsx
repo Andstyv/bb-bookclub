@@ -1,18 +1,18 @@
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { getPb } from "../utils/pocketBaseUtils";
 import { useNavigate } from "react-router-dom";
+import { pb } from "../utils/pocketBaseUtils";
 
 export default function AuthView() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const pb = getPb();
   const navigate = useNavigate();
 
   const handleLogin = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     setLoading(true);
+    const randomNumber = Math.floor(Math.random() * 99 + 1);
 
     try {
       // Try to log in the user
@@ -22,7 +22,7 @@ export default function AuthView() {
         position: "bottom-center",
       });
       navigate("/");
-    } catch (err) {
+    } catch (err: Props) {
       // If login fails, check if it's because the user doesn't exist
       if (err?.data?.status === 400) {
         // Adjust error code if needed
@@ -32,6 +32,7 @@ export default function AuthView() {
             email: email,
             password: password,
             passwordConfirm: password,
+            avatar_url: `https://avatar.iran.liara.run/public/${randomNumber}`,
           });
 
           // Log the user in after creating their account

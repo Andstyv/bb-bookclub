@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
-import { getPb } from "../utils/pocketBaseUtils";
 import { AuthRecord } from "pocketbase";
+import { pb } from "../utils/pocketBaseUtils";
 
 type FormValues = {
   username: string;
@@ -16,20 +16,16 @@ export default function AccountView({ session }: SessionProps) {
   const [loading, setLoading] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const { register, handleSubmit } = useForm<FormValues>();
-  const pb = getPb();
+
+  console.log(session);
 
   async function updateProfile(formData: FieldValues) {
     setLoading(true);
-
-    // const updates = {
-    //   id: session?.id,
-    //   username: formData.username,
-    //   updated_at: new Date(),
-    //   avatar_url: `https://avatar.iran.liara.run/public/${randomNumber}`,
-    // };
+    const randomNumber = Math.floor(Math.random() * 99 + 1);
 
     const data = {
       name: formData.username,
+      avatar_url: `https://avatar.iran.liara.run/public/${randomNumber}`,
     };
 
     const record = await pb.collection("users").update(`${session?.id}`, data);
@@ -54,7 +50,11 @@ export default function AccountView({ session }: SessionProps) {
             <>
               <h1 className="text-center text-2xl font-semibold mb-6">{session?.name ? "Din Profil" : "Legg til brukernavn"}</h1>
               <div className="flex justify-center items-center my-4">
-                {avatar ? <img src={avatar} className="w-24 h-24" /> : <div className="w-24 h-24 bg-bb_secondary rounded-full"></div>}
+                {session.avatar_url ? (
+                  <img src={session.avatar_url} className="w-24 h-24" />
+                ) : (
+                  <div className="w-24 h-24 bg-bb_secondary rounded-full"></div>
+                )}
               </div>
               <form onSubmit={handleSubmit(updateProfile)}>
                 <div className="mb-4">

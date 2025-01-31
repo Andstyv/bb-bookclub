@@ -32,9 +32,9 @@ export const HomeView = ({ session }: Props) => {
         <div>{error.message}</div>
       </>
     );
-  } else {
-    console.log(allRatings);
   }
+
+  console.log(allRatings);
 
   return (
     <>

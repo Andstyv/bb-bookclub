@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { getPb } from "../utils/pocketBaseUtils";
+import { pb } from "../utils/pocketBaseUtils";
 
 type Props = {
   avatar?: string;
@@ -8,7 +8,6 @@ type Props = {
 
 export const Navbar = ({ avatar }: Props) => {
   const [showHamburgerMenu, setShowHamburgerMenu] = useState<boolean>(false);
-  const pb = getPb();
   const isLoggedIn = pb.authStore.isValid;
   const navigate = useNavigate();
 

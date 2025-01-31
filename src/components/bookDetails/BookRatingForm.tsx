@@ -5,7 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { AuthRecord } from "pocketbase";
 import { getRatingsByUserAndBookIdPocket } from "../../services/pocketservice";
 import { usePocketBase } from "../../hooks/usePocketbase";
-import { getPb } from "../../utils/pocketBaseUtils";
+import { pb } from "../../utils/pocketBaseUtils";
 
 type DataProps = {
   movie_id: number;
@@ -21,7 +21,6 @@ type Props = {
 };
 
 export const BookRatingForm = ({ bookId, session, currentBook, userData }: Props) => {
-  const pb = getPb();
   const { register, handleSubmit } = useForm<DataProps>();
   const [userRatingScore, setUserRatingScore] = useState<string>("-");
   const { loading, data: userRatingByBookId, error } = usePocketBase(() => getRatingsByUserAndBookIdPocket(session?.id, bookId));
@@ -48,6 +47,7 @@ export const BookRatingForm = ({ bookId, session, currentBook, userData }: Props
   async function addNewBookRating(formData: FieldValues) {
     const updates = {
       user_id: session?.id,
+      user_email: session?.email,
       book_id: currentBook?.id,
       book_isbn: currentBook?.isbn,
       username: userData?.username,
