@@ -76,31 +76,39 @@ export const getRatingsByUserAndBookIdPocket = async (userId?: string, bookId?: 
   }
 };
 
-export const getAvgRatingForBookByIdPocket = async (bookId?: string): Promise<RatingsResponse> => {
-  try {
-    if (!bookId) {
-      throw new Error("Book ID is required");
-    }
+interface RatingsResponseId {
+  data: string | number | null;
+  error: Error | null;
+}
 
+const calcAvg = (ratings: Rating[]): string | number => {
+  if (ratings.length > 0) {
+    const sum = ratings.reduce((a, { rating_score }) => a + rating_score, 0);
+    const avg = sum / ratings.length;
+    return avg.toFixed(1);
+  }
+  return 0;
+};
+
+export const getAvgRatingForBookByIdPocket = async (bookId?: string): Promise<RatingsResponseId> => {
+  if (!bookId) {
+    return { data: null, error: new Error("Book ID is required") };
+  }
+
+  try {
     const records = await pb.collection("ratings").getFullList<Rating>({
       filter: `book_id = '${bookId}'`,
       sort: "-created",
     });
 
-    const calcAvg = (data: { items: Rating[] } | null) => {
-      if (data && data.items.length > 0) {
-        const sum = data.items.reduce((a, { rating_score }) => a + rating_score, 0);
-        const avg = sum / data.items.length;
-        return avg.toFixed(1);
-      }
-      return 0;
-    };
-
-    const avgRating = calcAvg({ items: records });
+    const avgRating = calcAvg(records);
 
     return { data: avgRating, error: null };
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching ratings:", error);
-    return { data: null, error: error instanceof Error ? error : new Error("Unknown error") };
+    if (error instanceof Error) {
+      return { data: null, error };
+    }
+    return { data: null, error: new Error("Unknown error") };
   }
 };

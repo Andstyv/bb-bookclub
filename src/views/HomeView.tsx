@@ -21,10 +21,6 @@ export const HomeView = ({ session }: Props) => {
     }
   }, [session, navigate]);
 
-  if (loading) {
-    return <p>Loading..</p>;
-  }
-
   if (error) {
     return (
       <>
@@ -34,12 +30,11 @@ export const HomeView = ({ session }: Props) => {
     );
   }
 
-  console.log(allRatings);
-
-  return (
-    <>
-      <CurrentBook currentBookId={currentBookId} daysLeft={daysLeft} />
-      {allRatings && !loading && <LatestRatings ratings={allRatings} session={session} />}
-    </>
-  );
+  if (!loading && !error)
+    return (
+      <>
+        <CurrentBook currentBookId={currentBookId} daysLeft={daysLeft} />
+        {allRatings && !loading && session && <LatestRatings ratings={allRatings} session={session} />}
+      </>
+    );
 };

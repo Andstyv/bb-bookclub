@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { AuthRecord } from "pocketbase";
 import { pb } from "../utils/pocketBaseUtils";
+import { useNavigate } from "react-router-dom";
 
 type FormValues = {
   username: string;
@@ -14,10 +15,12 @@ type SessionProps = {
 
 export default function AccountView({ session }: SessionProps) {
   const [loading, setLoading] = useState(false);
-  const [avatar, setAvatar] = useState(null);
   const { register, handleSubmit } = useForm<FormValues>();
+  const navigate = useNavigate();
 
-  console.log(session);
+  useEffect(() => {
+    if (!session) navigate("/");
+  }, [session, navigate]);
 
   async function updateProfile(formData: FieldValues) {
     setLoading(true);
@@ -40,60 +43,60 @@ export default function AccountView({ session }: SessionProps) {
     });
     setLoading(false);
   }
-
-  return (
-    <>
-      <div className="flex flex-col items-center text-white mt-12 w-full max-w-sm">
-        <div className="bg-bb_primary p-8 rounded shadow-md w-full max-w-xl min-h-96">
-          {loading && <div className="text-center mt-20">Laster..</div>}
-          {!loading && (
-            <>
-              <h1 className="text-center text-2xl font-semibold mb-6">{session?.name ? "Din Profil" : "Legg til brukernavn"}</h1>
-              <div className="flex justify-center items-center my-4">
-                {session.avatar_url ? (
-                  <img src={session.avatar_url} className="w-24 h-24" />
-                ) : (
-                  <div className="w-24 h-24 bg-bb_secondary rounded-full"></div>
-                )}
-              </div>
-              <form onSubmit={handleSubmit(updateProfile)}>
-                <div className="mb-4">
-                  <label htmlFor="email" className="block text-sm font-bold mb-2">
-                    E-post
-                  </label>
-                  <input
-                    id="email"
-                    type="text"
-                    className=" italic text-gray-600 border rounded px-3 py-2 w-full focus:outline-none bg-gray-200"
-                    value={session?.email}
-                    disabled
-                  />
+  if (session)
+    return (
+      <>
+        <div className="flex flex-col items-center text-white mt-12 w-full max-w-sm">
+          <div className="bg-bb_primary p-8 rounded shadow-md w-full max-w-xl min-h-96">
+            {loading && <div className="text-center mt-20">Laster..</div>}
+            {!loading && (
+              <>
+                <h1 className="text-center text-2xl font-semibold mb-6">{session?.name ? "Din Profil" : "Legg til brukernavn"}</h1>
+                <div className="flex justify-center items-center my-4">
+                  {session.avatar_url ? (
+                    <img src={session.avatar_url} className="w-24 h-24" />
+                  ) : (
+                    <div className="w-24 h-24 bg-bb_secondary rounded-full"></div>
+                  )}
                 </div>
-                <div className="mb-6">
-                  <label htmlFor="username" className="block text-sm font-bold mb-2">
-                    Brukernavn
-                  </label>
-                  <input
-                    id="username"
-                    type="text"
-                    className="text-black border rounded px-3 py-2 w-full focus:outline-none "
-                    required
-                    defaultValue={session?.name || ""}
-                    {...register("username")}
-                    maxLength={14}
-                  />
-                </div>
-                <div className="flex justify-center">
-                  <button className="py-2 px-2 rounded-lg bg-bb_btn hover:brightness-110 transition-all font-bold" type="submit" disabled={loading}>
-                    {loading ? "Laster ..." : session?.name ? "Oppdater informasjon" : "Opprett brukernavn"}
-                  </button>
-                </div>
-              </form>
-            </>
-          )}
+                <form onSubmit={handleSubmit(updateProfile)}>
+                  <div className="mb-4">
+                    <label htmlFor="email" className="block text-sm font-bold mb-2">
+                      E-post
+                    </label>
+                    <input
+                      id="email"
+                      type="text"
+                      className=" italic text-gray-600 border rounded px-3 py-2 w-full focus:outline-none bg-gray-200"
+                      value={session?.email}
+                      disabled
+                    />
+                  </div>
+                  <div className="mb-6">
+                    <label htmlFor="username" className="block text-sm font-bold mb-2">
+                      Brukernavn
+                    </label>
+                    <input
+                      id="username"
+                      type="text"
+                      className="text-black border rounded px-3 py-2 w-full focus:outline-none "
+                      required
+                      defaultValue={session?.name || ""}
+                      {...register("username")}
+                      maxLength={14}
+                    />
+                  </div>
+                  <div className="flex justify-center">
+                    <button className="py-2 px-2 rounded-lg bg-bb_btn hover:brightness-110 transition-all font-bold" type="submit" disabled={loading}>
+                      {loading ? "Laster ..." : session?.name ? "Oppdater informasjon" : "Opprett brukernavn"}
+                    </button>
+                  </div>
+                </form>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-      <Toaster />
-    </>
-  );
+        <Toaster />
+      </>
+    );
 }

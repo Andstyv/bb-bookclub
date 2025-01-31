@@ -7,7 +7,7 @@ type Props = {
   daysLeft: Duration;
 };
 
-export const CurrentBook = ({ currentBookId, daysLeft }: Props) => {
+export const CurrentBook = ({ currentBookId }: Props) => {
   const { book } = useGetBookById(currentBookId);
 
   return (

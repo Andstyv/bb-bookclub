@@ -10,6 +10,12 @@ export interface Rating {
   book_id: number;
   book_description: string;
   book_cover_url: string;
+  expand?: {
+    user_id: {
+      name: string;
+      email: string;
+    };
+  };
 }
 
 export interface User {

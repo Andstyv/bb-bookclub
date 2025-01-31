@@ -19,14 +19,14 @@ export const Navbar = ({ avatar }: Props) => {
 
   return (
     <>
-      <div className="justify-between px-4 flex max-w-2xl m-auto text-white pt-8">
+      <div className="justify-between px-4 flex max-w-4xl m-auto text-white pt-8">
         <div className="min-w-20 flex">
           {isLoggedIn ? (
             <Link to={"/profil"} className="w-12 h-12 bg-bb_secondary rounded-full" onClick={() => setShowHamburgerMenu(false)}>
               <img src={avatar || ""} />
             </Link>
           ) : (
-            <div className="w-48 border"></div>
+            <div className="w-48"></div>
           )}
         </div>
         <div className="flex-1 flex justify-center items-center">
@@ -42,7 +42,7 @@ export const Navbar = ({ avatar }: Props) => {
             {isLoggedIn ? (
               "🍔"
             ) : (
-              <div className="border w-48 flex justify-between">
+              <div className="w-48 flex justify-between">
                 <Link to={"/logg-inn"} className="font-bold text-xs p-1 bg-bb_secondary hover:brightness-110 rounded-lg">
                   Logg inn
                 </Link>

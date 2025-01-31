@@ -9,6 +9,12 @@ export default function AuthView() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  interface ErrorResponse {
+    data?: {
+      message: string;
+    };
+  }
+
   const handleLogin = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     setLoading(true);
@@ -19,13 +25,21 @@ export default function AuthView() {
         duration: 5000,
         position: "bottom-center",
       });
-      setTimeout(() => navigate("/"), 2000);
+      navigate("/");
+      navigate(0);
     } catch (err) {
-      // Handle other login errors
-      toast.error("Innlogging feilet: " + err?.data?.message, {
-        duration: 5000,
-        position: "bottom-center",
-      });
+      const typedError = err as ErrorResponse;
+      if (typedError.data?.message) {
+        toast.error("Innlogging feilet: " + typedError.data.message, {
+          duration: 5000,
+          position: "bottom-center",
+        });
+      } else {
+        toast.error("Innlogging feilet: Unknown error occurred", {
+          duration: 5000,
+          position: "bottom-center",
+        });
+      }
     }
 
     setLoading(false);

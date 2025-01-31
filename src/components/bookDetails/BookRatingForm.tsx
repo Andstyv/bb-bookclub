@@ -6,7 +6,6 @@ import { AuthRecord } from "pocketbase";
 import { getRatingsByUserAndBookIdPocket } from "../../services/pocketservice";
 import { usePocketBase } from "../../hooks/usePocketbase";
 import { pb } from "../../utils/pocketBaseUtils";
-import { useNavigate } from "react-router-dom";
 
 type DataProps = {
   movie_id: number;

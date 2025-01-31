@@ -32,8 +32,10 @@ export default function CreateUserView() {
         duration: 5000,
         position: "bottom-center",
       });
-      navigate(0);
-      navigate("/profil");
+      if (pb.authStore.isValid) {
+        navigate("/");
+        navigate(0);
+      }
     } catch (createError) {
       toast.error("Kunne ikke opprette bruker.", {
         duration: 5000,
