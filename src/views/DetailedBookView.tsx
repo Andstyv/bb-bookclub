@@ -48,7 +48,7 @@ export const DetailedBookView = ({ session }: Props) => {
       {currentBook && (
         <div className="flex w-full max-w-2xl flex-col text-white gap-6 mt-12 mb-16">
           <div>
-            <img src={currentBook.cover_img_url} className="rounded-xl h-96 w-full object-cover object-top" />
+            <img src={currentBook.cover_img_url} className="rounded-xl h-96 w-full object-cover object-center" />
           </div>
           <div className="flex">
             <div className="flex-1 flex flex-col">

@@ -8,6 +8,8 @@ import { HomeView } from "./views/HomeView";
 import { DetailedBookView } from "./views/DetailedBookView";
 import { MyBookRatingsView } from "./views/MyBookRatingsView";
 import { pb } from "./utils/pocketBaseUtils";
+import { BooksView } from "./views/BooksView";
+import CreateUserView from "./views/CreateUserView";
 
 function App() {
   const user = pb.authStore.record;
@@ -34,7 +36,7 @@ function App() {
         },
         {
           path: "/profil",
-          element: user ? <Account session={user} /> : <Auth />,
+          element: <Account session={user} />,
         },
         {
           path: "detaljer/:id",
@@ -43,6 +45,18 @@ function App() {
         {
           path: "/mine-ratinger",
           element: <MyBookRatingsView session={user} />,
+        },
+        {
+          path: "/bøker",
+          element: <BooksView />,
+        },
+        {
+          path: "/opprett-bruker",
+          element: <CreateUserView />,
+        },
+        {
+          path: "/logg-inn",
+          element: <Auth />,
         },
       ],
     },

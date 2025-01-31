@@ -39,7 +39,7 @@ export const HomeView = ({ session }: Props) => {
   return (
     <>
       <CurrentBook currentBookId={currentBookId} daysLeft={daysLeft} />
-      {allRatings && !loading && <LatestRatings ratings={allRatings} />}
+      {allRatings && !loading && <LatestRatings ratings={allRatings} session={session} />}
     </>
   );
 };

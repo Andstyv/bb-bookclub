@@ -13,7 +13,7 @@ export const Navbar = ({ avatar }: Props) => {
 
   const logOut = () => {
     pb.authStore.clear();
-    navigate("/");
+    navigate(0);
     setShowHamburgerMenu(false);
   };
 
@@ -21,10 +21,12 @@ export const Navbar = ({ avatar }: Props) => {
     <>
       <div className="justify-between px-4 flex max-w-2xl m-auto text-white pt-8">
         <div className="min-w-20 flex">
-          {isLoggedIn && (
+          {isLoggedIn ? (
             <Link to={"/profil"} className="w-12 h-12 bg-bb_secondary rounded-full" onClick={() => setShowHamburgerMenu(false)}>
               <img src={avatar || ""} />
             </Link>
+          ) : (
+            <div className="w-48 border"></div>
           )}
         </div>
         <div className="flex-1 flex justify-center items-center">
@@ -34,15 +36,20 @@ export const Navbar = ({ avatar }: Props) => {
         </div>
         <div className="flex items-center justify-end min-w-20">
           <button
-            className={`ml-2 text-4xl ${showHamburgerMenu ? "rotate-90 transition-all" : "transition-all"}`}
+            className={`text-4xl ${showHamburgerMenu ? "rotate-90 transition-all" : "transition-all"}`}
             onClick={isLoggedIn ? () => setShowHamburgerMenu(!showHamburgerMenu) : undefined}
           >
             {isLoggedIn ? (
               "🍔"
             ) : (
-              <Link to={"/profil"} className="font-bold text-xs p-1 bg-bb_secondary hover:brightness-110 rounded-lg">
-                Logg inn
-              </Link>
+              <div className="border w-48 flex justify-between">
+                <Link to={"/logg-inn"} className="font-bold text-xs p-1 bg-bb_secondary hover:brightness-110 rounded-lg">
+                  Logg inn
+                </Link>
+                <Link to={"/opprett-bruker"} className="font-bold text-xs p-1 bg-bb_secondary hover:brightness-110 rounded-lg">
+                  Opprett bruker
+                </Link>
+              </div>
             )}
           </button>
         </div>
@@ -50,6 +57,15 @@ export const Navbar = ({ avatar }: Props) => {
       {showHamburgerMenu && (
         <div className="absolute w-full h-full bg-bb_bg z-10">
           <ul className="text-white font-bold px-2 flex flex-col justify-center items-center mt-20 gap-12">
+            <li>
+              <Link
+                to={"/bøker"}
+                onClick={() => setShowHamburgerMenu(false)}
+                className=" line hover:text-bb_secondary transition-all pb-1 border-b-2"
+              >
+                Bøker
+              </Link>
+            </li>
             <li>
               <Link
                 to={"/mine-ratinger"}
