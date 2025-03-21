@@ -2,7 +2,7 @@ import { create } from "zustand";
 import PocketBase from "pocketbase";
 
 // Initialize PocketBase client
-const pb = new PocketBase("http://127.0.0.1:8090");
+export const pb = new PocketBase("http://127.0.0.1:8090");
 
 type User = {
   id: string;

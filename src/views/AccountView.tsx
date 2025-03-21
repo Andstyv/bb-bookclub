@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
-import { pb } from "../utils/pocketBaseUtils";
+import { pb } from "../utils/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../utils/useAuthStore";
 

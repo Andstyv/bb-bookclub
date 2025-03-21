@@ -4,7 +4,7 @@ import { Book, Rating, User } from "../../types/types";
 import toast, { Toaster } from "react-hot-toast";
 import { getRatingsByUserAndBookIdPocket } from "../../services/pocketservice";
 import { usePocketBase } from "../../hooks/usePocketbase";
-import { pb } from "../../utils/pocketBaseUtils";
+import { pb } from "../../utils/useAuthStore";
 import { useAuthStore } from "../../utils/useAuthStore";
 
 type DataProps = {

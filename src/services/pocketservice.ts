@@ -1,5 +1,5 @@
 import { Rating } from "../types/types";
-import { pb } from "../utils/pocketBaseUtils";
+import { pb } from "../utils/useAuthStore";
 
 type RatingsResponse = {
   data: Rating[] | number | null;
