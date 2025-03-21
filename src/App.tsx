@@ -1,24 +1,23 @@
 import { ContentWrapper } from "./components/ContentWrapper";
-import { useGetSession } from "./hooks/useGetSession";
 import Account from "./views/AccountView";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ErrorPage } from "./components/ErrorPage";
 import Auth from "./views/AuthView";
 import { Navbar } from "./components/Navbar";
 import { HomeView } from "./views/HomeView";
-import { useGetUser } from "./hooks/useGetUser";
 import { DetailedBookView } from "./views/DetailedBookView";
 import { MyBookRatingsView } from "./views/MyBookRatingsView";
+import { BooksView } from "./views/BooksView";
+import CreateUserView from "./views/CreateUserView";
+import { useAuthStore } from "./utils/useAuthStore";
 
 function App() {
-  const { session, loadingSession } = useGetSession();
-  const { userData } = useGetUser({ session });
+  const { user } = useAuthStore();
 
   const AppLayout = () => {
-    console.log("Using app layout");
     return (
       <>
-        <Navbar session={session ?? undefined} avatar={userData?.avatar_url || undefined} />
+        <Navbar avatar={user?.avatar_url || undefined} />
         <ContentWrapper>
           <Outlet />
         </ContentWrapper>
@@ -33,19 +32,31 @@ function App() {
       children: [
         {
           path: "/",
-          element: <HomeView session={session} />,
+          element: <HomeView />,
         },
         {
           path: "/profil",
-          element: session && !loadingSession ? <Account session={session} /> : <Auth />,
+          element: <Account />,
         },
         {
           path: "detaljer/:id",
-          element: <DetailedBookView session={session} />,
+          element: <DetailedBookView />,
         },
         {
           path: "/mine-ratinger",
-          element: <MyBookRatingsView session={session} loadingSession={loadingSession} />,
+          element: <MyBookRatingsView />,
+        },
+        {
+          path: "/bøker",
+          element: <BooksView />,
+        },
+        {
+          path: "/opprett-bruker",
+          element: <CreateUserView />,
+        },
+        {
+          path: "/logg-inn",
+          element: <Auth />,
         },
       ],
     },

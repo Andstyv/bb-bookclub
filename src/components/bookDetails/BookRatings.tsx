@@ -1,14 +1,28 @@
-import { useSupabase } from "../../hooks/useSupabase";
-import { getBookRatingsById } from "../../services/supaservice";
+import { useEffect, useState } from "react";
 import { Rating } from "../../types/types";
 import { BookRatingsCard } from "./BookRatingsCard";
+import { getBookRatingsByIdPocket } from "../../services/pocketservice";
 
 type Props = {
   id: string;
 };
 
 export const BookRatings = ({ id }: Props) => {
-  const { data: bookRatings, loading, error } = useSupabase(() => getBookRatingsById(id));
+  const [bookRatings, setBookRatings] = useState<Rating[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const fetchRatings = async () => {
+      setLoading(true);
+      const { data, error } = await getBookRatingsByIdPocket(id);
+      setBookRatings(data);
+      setError(error);
+      setLoading(false);
+    };
+
+    fetchRatings();
+  }, [id]);
 
   if (error) {
     return (

@@ -1,24 +1,17 @@
 import { useEffect, useState } from "react";
-import { Session } from "@supabase/gotrue-js";
 import { useParams } from "react-router-dom";
 import { books } from "../books/books";
 import { Book } from "../types/types";
-import { useGetRatingByUserAndBookId } from "../hooks/useGetRatingsByUserAndBookId";
-import { BookRatingForm } from "../components/bookDetails/BookRatingForm";
-import { useGetUser } from "../hooks/useGetUser";
 import { BookRatings } from "../components/bookDetails/BookRatings";
-import { useSupabase } from "../hooks/useSupabase";
-import { getAvgRatingForBookById } from "../services/supaservice";
+import { getAvgRatingForBookByIdPocket } from "../services/pocketservice";
+import { usePocketBase } from "../hooks/usePocketbase";
+import { BookRatingForm } from "../components/bookDetails/BookRatingForm";
+import { useAuthStore } from "../utils/useAuthStore";
 
-type Props = {
-  session?: Session;
-};
-
-export const DetailedBookView = ({ session }: Props) => {
-  const { userData } = useGetUser({ session });
+export const DetailedBookView = () => {
+  const { user } = useAuthStore();
   const { id } = useParams();
-  const { data: avgRatingByBookId, loading, error } = useSupabase(() => getAvgRatingForBookById(id));
-  const { userRatingByBookId, isLoading } = useGetRatingByUserAndBookId({ session, id });
+  const { loading, data, error } = usePocketBase(() => getAvgRatingForBookByIdPocket(id));
   const [currentBook, setCurrentBook] = useState<Book>();
 
   useEffect(() => {
@@ -40,13 +33,19 @@ export const DetailedBookView = ({ session }: Props) => {
       </>
     );
   }
+  if (loading)
+    return (
+      <>
+        <h1>Loading</h1>
+      </>
+    );
 
   return (
     <>
       {currentBook && (
         <div className="flex w-full max-w-2xl flex-col text-white gap-6 mt-12 mb-16">
           <div>
-            <img src={currentBook.cover_img_url} className="rounded-xl h-96 w-full object-cover object-top" />
+            <img src={currentBook.cover_img_url} className="rounded-xl h-96 w-full object-cover object-center" />
           </div>
           <div className="flex">
             <div className="flex-1 flex flex-col">
@@ -54,18 +53,14 @@ export const DetailedBookView = ({ session }: Props) => {
               <p className="text-[#9797b0]">{currentBook.author}</p>
             </div>
             <div className="flex items-center">
-              <span className="w-12 h-12 bg-bb_btn flex justify-center items-center rounded-full text-xl font-semibold">
-                {!loading && avgRatingByBookId?.toString()}
-              </span>
+              <span className="w-12 h-12 bg-bb_btn flex justify-center items-center rounded-full text-xl font-semibold">{data > 0 ? data : "-"}</span>
             </div>
           </div>
           <div className="flex flex-col">
             <h3 className="text-xl">Description</h3>
             <p className="text-[#9797b0]">{currentBook.description}</p>
           </div>
-          {!isLoading && session && (
-            <BookRatingForm userData={userData} currentBook={currentBook} session={session} userRatingByBookId={userRatingByBookId} />
-          )}
+          {!loading && user && <BookRatingForm bookId={id} currentBook={currentBook} />}
           {id && <BookRatings id={id} />}
         </div>
       )}

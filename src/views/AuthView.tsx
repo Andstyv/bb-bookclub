@@ -1,51 +1,71 @@
-import { useState } from "react";
-import { supabase } from "../supabaseClient";
-import toast, { Toaster } from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../utils/useAuthStore";
+
+type ErrResponse = {
+  message: string;
+};
 
 export default function AuthView() {
+  const { isAuthenticated } = useAuthStore();
+  const { login } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = async (event: { preventDefault: () => void }) => {
-    event.preventDefault();
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
+  const handleLogin = async () => {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithOtp({ email });
-
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success(`Sjekk e-post for innloggingslenke`, {
-        duration: 5000,
-        position: "bottom-center",
-      });
+    try {
+      await login(email, password);
+    } catch (err) {
+      const typedError = err as ErrResponse;
+      setError(typedError.message);
     }
     setLoading(false);
   };
 
-  return (
-    <div className="row flex flex-center mt-24">
-      <div className="p-8 bg-bb_primary rounded-lg">
-        <h1 className="font-bold text-2xl text-center text-white">Logg inn / opprett bruker</h1>
-        <form className="" onSubmit={handleLogin}>
-          <div>
-            <input
-              className="p-2 rounded-lg mt-8 w-full"
-              type="email"
-              placeholder="Din e-post"
-              value={email}
-              required={true}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+  if (!loading)
+    return (
+      <>
+        <div className="row flex flex-center mt-24">
+          <div className="p-8 bg-bb_primary rounded-lg">
+            <h1 className="font-bold text-2xl text-center text-white text-wrap max-w-xs">Logg inn</h1>
+            <form className="max-w-80" onSubmit={handleLogin}>
+              <div>
+                <input
+                  className="p-2 rounded-lg mt-8 w-full"
+                  type="email"
+                  placeholder="E-post"
+                  value={email}
+                  required={true}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                  className="p-2 rounded-lg mt-8 w-full"
+                  type="password"
+                  placeholder="Passord"
+                  value={password}
+                  required={true}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <div className="w-full flex justify-center mt-8">
+                <button className="bg-bb_secondary text-white font-semibold p-2 rounded-lg" disabled={loading}>
+                  {loading ? <span>Laster</span> : <span>Bekreft</span>}
+                </button>
+              </div>
+            </form>
           </div>
-          <div className="w-full flex justify-center mt-8">
-            <button className="bg-bb_secondary text-white font-semibold p-2 rounded-lg" disabled={loading}>
-              {loading ? <span>Laster</span> : <span>Bekreft</span>}
-            </button>
-          </div>
-        </form>
-      </div>
-      <Toaster />
-    </div>
-  );
+        </div>
+        {error && <div className="text-red-500 mt-8">{error}</div>}
+      </>
+    );
 }

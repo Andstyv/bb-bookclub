@@ -18,8 +18,6 @@ export const SearchBooks = () => {
       const res = await fetch(url);
       const data = await res.json();
       setBooks(data.docs);
-      console.log(books);
-      console.log(data);
     } catch (err) {
       console.log(err);
     }

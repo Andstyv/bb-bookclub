@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { Book, Rating, User } from "../../types/types";
-import { supabase } from "../../supabaseClient";
 import toast, { Toaster } from "react-hot-toast";
-import { Session } from "@supabase/supabase-js";
+import { getRatingsByUserAndBookIdPocket } from "../../services/pocketservice";
+import { usePocketBase } from "../../hooks/usePocketbase";
+import { pb } from "../../utils/pocketBaseUtils";
+import { useAuthStore } from "../../utils/useAuthStore";
 
 type DataProps = {
   movie_id: number;
@@ -12,21 +14,23 @@ type DataProps = {
 
 type Props = {
   userRatingByBookId?: Rating | null;
-  session: Session;
   currentBook: Book;
   userData?: User;
+  bookId?: string;
 };
 
-export const BookRatingForm = ({ userRatingByBookId, session, currentBook, userData }: Props) => {
+export const BookRatingForm = ({ bookId, currentBook, userData }: Props) => {
+  const { user } = useAuthStore();
   const { register, handleSubmit } = useForm<DataProps>();
   const [userRatingScore, setUserRatingScore] = useState<string>("-");
+  const { loading, data: userRatingByBookId, error } = usePocketBase(() => getRatingsByUserAndBookIdPocket(user?.id, bookId));
 
   async function updateBookRating(formData: FieldValues) {
     const updates = {
       rating_score: parseFloat(formData.rating_score),
     };
-    const { error } = await supabase.from("ratings").update(updates).eq("user_id", session?.user.id).eq("book_id", currentBook?.id);
 
+    await pb.collection("ratings").update(`${userRatingByBookId[0].id}`, updates);
     if (error) {
       toast.error(error.message, {
         duration: 3000,
@@ -42,7 +46,8 @@ export const BookRatingForm = ({ userRatingByBookId, session, currentBook, userD
 
   async function addNewBookRating(formData: FieldValues) {
     const updates = {
-      user_id: session?.user.id,
+      user_id: user?.id,
+      user_email: user?.email,
       book_id: currentBook?.id,
       book_isbn: currentBook?.isbn,
       username: userData?.username,
@@ -53,7 +58,7 @@ export const BookRatingForm = ({ userRatingByBookId, session, currentBook, userD
       book_cover_url: currentBook?.cover_img_url,
     };
 
-    const { error } = await supabase.from("ratings").insert(updates);
+    await pb.collection("ratings").create(updates);
 
     if (error) {
       alert(error.message);
@@ -65,32 +70,49 @@ export const BookRatingForm = ({ userRatingByBookId, session, currentBook, userD
     }
   }
 
+  if (error) {
+    return (
+      <>
+        <div>An error occured</div>
+        <div>{error.message}</div>
+      </>
+    );
+  }
+  if (loading)
+    return (
+      <>
+        <h1>Loading</h1>
+      </>
+    );
+
   return (
     <>
-      <form
-        className="card-body p-4 my-8 rounded-lg bg-bb_primary flex flex-col gap-4"
-        onSubmit={handleSubmit(userRatingByBookId ? updateBookRating : addNewBookRating)}
-      >
-        {userRatingByBookId?.rating_score ? (
-          <p className="italic text-center text-white">{`Du har allerede gitt denne ${userRatingByBookId?.rating_score} poeng`}</p>
-        ) : (
-          ""
-        )}
-        <div className="self-center min-w-[50px] text-center bg-bb_bg p-1 rounded-lg">{userRatingScore}</div>
-        <input
-          type="range"
-          min={0}
-          max={10}
-          defaultValue={5}
-          className="range cursor-pointer"
-          step={1}
-          {...register("rating_score")}
-          onChange={(e) => setUserRatingScore(e.target.value)}
-        />
-        <button className="bg-bb_secondary mt-auto hover:brightness-110 p-4 rounded-lg">
-          {userRatingByBookId ? "Endre min rating" : "Gi rating"}
-        </button>
-      </form>
+      {userRatingByBookId && (
+        <form
+          className="card-body p-4 my-8 rounded-lg bg-bb_primary flex flex-col gap-4"
+          onSubmit={handleSubmit(userRatingByBookId[0] ? updateBookRating : addNewBookRating)}
+        >
+          {userRatingByBookId[0]?.rating_score ? (
+            <p className="italic text-center text-white">{`Du har allerede gitt denne ${userRatingByBookId[0]?.rating_score} poeng`}</p>
+          ) : (
+            ""
+          )}
+          <div className="self-center min-w-[50px] text-center bg-bb_bg p-1 rounded-lg">{userRatingScore}</div>
+          <input
+            type="range"
+            min={0}
+            max={10}
+            defaultValue={5}
+            className="range cursor-pointer"
+            step={1}
+            {...register("rating_score")}
+            onChange={(e) => setUserRatingScore(e.target.value)}
+          />
+          <button className="bg-bb_secondary mt-auto hover:brightness-110 p-4 rounded-lg">
+            {userRatingByBookId[0] ? "Endre min rating" : "Gi rating"}
+          </button>
+        </form>
+      )}
       <Toaster />
     </>
   );
