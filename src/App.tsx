@@ -7,12 +7,12 @@ import { Navbar } from "./components/Navbar";
 import { HomeView } from "./views/HomeView";
 import { DetailedBookView } from "./views/DetailedBookView";
 import { MyBookRatingsView } from "./views/MyBookRatingsView";
-import { pb } from "./utils/pocketBaseUtils";
 import { BooksView } from "./views/BooksView";
 import CreateUserView from "./views/CreateUserView";
+import { useAuthStore } from "./utils/useAuthStore";
 
 function App() {
-  const user = pb.authStore.record;
+  const { user } = useAuthStore();
 
   const AppLayout = () => {
     return (
@@ -32,19 +32,19 @@ function App() {
       children: [
         {
           path: "/",
-          element: <HomeView session={user} />,
+          element: <HomeView />,
         },
         {
           path: "/profil",
-          element: <Account session={user} />,
+          element: <Account />,
         },
         {
           path: "detaljer/:id",
-          element: <DetailedBookView session={user} />,
+          element: <DetailedBookView />,
         },
         {
           path: "/mine-ratinger",
-          element: <MyBookRatingsView session={user} />,
+          element: <MyBookRatingsView />,
         },
         {
           path: "/bøker",

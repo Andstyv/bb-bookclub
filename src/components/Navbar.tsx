@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { pb } from "../utils/pocketBaseUtils";
+import { useAuthStore } from "../utils/useAuthStore";
 
 type Props = {
   avatar?: string;
@@ -8,12 +8,13 @@ type Props = {
 
 export const Navbar = ({ avatar }: Props) => {
   const [showHamburgerMenu, setShowHamburgerMenu] = useState<boolean>(false);
-  const isLoggedIn = pb.authStore.isValid;
+  // const isLoggedIn = pb.authStore.isValid;
   const navigate = useNavigate();
+  const { logout, isAuthenticated } = useAuthStore();
 
-  const logOut = () => {
-    pb.authStore.clear();
-    navigate(0);
+  const handleLogout = () => {
+    logout();
+    navigate("/");
     setShowHamburgerMenu(false);
   };
 
@@ -21,7 +22,7 @@ export const Navbar = ({ avatar }: Props) => {
     <>
       <div className="justify-between px-4 flex max-w-4xl m-auto text-white pt-8">
         <div className="min-w-20 flex">
-          {isLoggedIn ? (
+          {isAuthenticated ? (
             <Link to={"/profil"} className="w-12 h-12 bg-bb_secondary rounded-full" onClick={() => setShowHamburgerMenu(false)}>
               <img src={avatar || ""} />
             </Link>
@@ -37,9 +38,9 @@ export const Navbar = ({ avatar }: Props) => {
         <div className="flex items-center justify-end min-w-20">
           <button
             className={`text-4xl ${showHamburgerMenu ? "rotate-90 transition-all" : "transition-all"}`}
-            onClick={isLoggedIn ? () => setShowHamburgerMenu(!showHamburgerMenu) : undefined}
+            onClick={isAuthenticated ? () => setShowHamburgerMenu(!showHamburgerMenu) : undefined}
           >
-            {isLoggedIn ? (
+            {isAuthenticated ? (
               "🍔"
             ) : (
               <div className="w-48 flex justify-between">
@@ -78,9 +79,9 @@ export const Navbar = ({ avatar }: Props) => {
             <li>
               <button
                 className="transition-all hover:scale-110 hover:brightness-110 p-2 bg-bb_btn rounded-lg"
-                onClick={isLoggedIn ? logOut : undefined}
+                onClick={isAuthenticated ? handleLogout : undefined}
               >
-                {isLoggedIn ? "Logg ut" : ""}
+                {isAuthenticated ? "Logg ut" : ""}
               </button>
             </li>
           </ul>

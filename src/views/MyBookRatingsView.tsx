@@ -1,15 +1,12 @@
 import { RatingCard } from "../components/RatingCard";
 import { Rating } from "../types/types";
 import { getAllRatingsByUserIdPocket } from "../services/pocketservice";
-import { AuthRecord } from "pocketbase";
 import { usePocketBase } from "../hooks/usePocketbase";
+import { useAuthStore } from "../utils/useAuthStore";
 
-type Props = {
-  session?: AuthRecord;
-};
-
-export const MyBookRatingsView = ({ session }: Props) => {
-  const { loading, data: allRatingsByUser, error } = usePocketBase(() => getAllRatingsByUserIdPocket(session?.id));
+export const MyBookRatingsView = () => {
+  const { user } = useAuthStore();
+  const { loading, data: allRatingsByUser, error } = usePocketBase(() => getAllRatingsByUserIdPocket(user?.id));
 
   if (loading) {
     return <div>Loading...</div>;

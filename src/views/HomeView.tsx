@@ -1,25 +1,13 @@
-import { useEffect } from "react";
 import { CurrentBook } from "../components/CurrentBook";
 import { LatestRatings } from "../components/LatestRatings";
 import { currentBookId, daysLeft } from "../constants/currentBookInfo";
-import { useNavigate } from "react-router-dom";
-import { AuthRecord } from "pocketbase";
 import { getAllRatingsPocket } from "../services/pocketservice";
 import { usePocketBase } from "../hooks/usePocketbase";
+import { useAuthStore } from "../utils/useAuthStore";
 
-type Props = {
-  session?: AuthRecord;
-};
-
-export const HomeView = ({ session }: Props) => {
-  const navigate = useNavigate();
+export const HomeView = () => {
+  const { user } = useAuthStore();
   const { loading, data: allRatings, error } = usePocketBase(() => getAllRatingsPocket());
-
-  useEffect(() => {
-    if (session && !session.id) {
-      navigate("/profil");
-    }
-  }, [session, navigate]);
 
   if (error) {
     return (
@@ -34,7 +22,7 @@ export const HomeView = ({ session }: Props) => {
     return (
       <>
         <CurrentBook currentBookId={currentBookId} daysLeft={daysLeft} />
-        {allRatings && !loading && session && <LatestRatings ratings={allRatings} session={session} />}
+        {allRatings && !loading && user && <LatestRatings ratings={allRatings} />}
       </>
     );
 };

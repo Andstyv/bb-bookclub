@@ -1,49 +1,47 @@
 import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
-import { AuthRecord } from "pocketbase";
 import { pb } from "../utils/pocketBaseUtils";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../utils/useAuthStore";
 
 type FormValues = {
   username: string;
 };
 
-type SessionProps = {
-  session: AuthRecord;
-};
-
-export default function AccountView({ session }: SessionProps) {
+export default function AccountView() {
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm<FormValues>();
   const navigate = useNavigate();
+  const { user } = useAuthStore();
 
   useEffect(() => {
-    if (!session) navigate("/");
-  }, [session, navigate]);
+    if (!user) navigate("/");
+  }, [user, navigate]);
 
   async function updateProfile(formData: FieldValues) {
     setLoading(true);
-    const randomNumber = Math.floor(Math.random() * 99 + 1);
 
     const data = {
       name: formData.username,
-      avatar_url: `https://avatar.iran.liara.run/public/${randomNumber}`,
     };
 
-    const record = await pb.collection("users").update(`${session?.id}`, data);
+    const record = await pb.collection("users").update(`${user?.id}`, data);
 
     if (record.code) {
       alert(record.message);
       return;
     }
-    toast.success(`Brukernavn ${session?.name ? "oppdatert" : "registrert"}`, {
+
+    toast.success(`Brukernavn ${user?.name ? "oppdatert" : "registrert"}`, {
       duration: 3000,
       position: "bottom-center",
     });
     setLoading(false);
+
+    useAuthStore.getState().checkAuth();
   }
-  if (session)
+  if (user)
     return (
       <>
         <div className="flex flex-col items-center text-white mt-12 w-full max-w-sm">
@@ -51,10 +49,10 @@ export default function AccountView({ session }: SessionProps) {
             {loading && <div className="text-center mt-20">Laster..</div>}
             {!loading && (
               <>
-                <h1 className="text-center text-2xl font-semibold mb-6">{session?.name ? "Din Profil" : "Legg til brukernavn"}</h1>
+                <h1 className="text-center text-2xl font-semibold mb-6">{user?.name ? "Din Profil" : "Legg til brukernavn"}</h1>
                 <div className="flex justify-center items-center my-4">
-                  {session.avatar_url ? (
-                    <img src={session.avatar_url} className="w-24 h-24" />
+                  {user.avatar_url ? (
+                    <img src={user.avatar_url} className="w-24 h-24" />
                   ) : (
                     <div className="w-24 h-24 bg-bb_secondary rounded-full"></div>
                   )}
@@ -68,7 +66,7 @@ export default function AccountView({ session }: SessionProps) {
                       id="email"
                       type="text"
                       className=" italic text-gray-600 border rounded px-3 py-2 w-full focus:outline-none bg-gray-200"
-                      value={session?.email}
+                      value={user?.email}
                       disabled
                     />
                   </div>
@@ -81,14 +79,14 @@ export default function AccountView({ session }: SessionProps) {
                       type="text"
                       className="text-black border rounded px-3 py-2 w-full focus:outline-none "
                       required
-                      defaultValue={session?.name || ""}
+                      defaultValue={user?.name || ""}
                       {...register("username")}
                       maxLength={14}
                     />
                   </div>
                   <div className="flex justify-center">
                     <button className="py-2 px-2 rounded-lg bg-bb_btn hover:brightness-110 transition-all font-bold" type="submit" disabled={loading}>
-                      {loading ? "Laster ..." : session?.name ? "Oppdater informasjon" : "Opprett brukernavn"}
+                      {loading ? "Laster ..." : user?.name ? "Oppdater informasjon" : "Opprett brukernavn"}
                     </button>
                   </div>
                 </form>

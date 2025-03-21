@@ -4,15 +4,12 @@ import { books } from "../books/books";
 import { Book } from "../types/types";
 import { BookRatings } from "../components/bookDetails/BookRatings";
 import { getAvgRatingForBookByIdPocket } from "../services/pocketservice";
-import { AuthRecord } from "pocketbase";
 import { usePocketBase } from "../hooks/usePocketbase";
 import { BookRatingForm } from "../components/bookDetails/BookRatingForm";
+import { useAuthStore } from "../utils/useAuthStore";
 
-type Props = {
-  session?: AuthRecord;
-};
-
-export const DetailedBookView = ({ session }: Props) => {
+export const DetailedBookView = () => {
+  const { user } = useAuthStore();
   const { id } = useParams();
   const { loading, data, error } = usePocketBase(() => getAvgRatingForBookByIdPocket(id));
   const [currentBook, setCurrentBook] = useState<Book>();
@@ -63,7 +60,7 @@ export const DetailedBookView = ({ session }: Props) => {
             <h3 className="text-xl">Description</h3>
             <p className="text-[#9797b0]">{currentBook.description}</p>
           </div>
-          {!loading && session && <BookRatingForm bookId={id} currentBook={currentBook} session={session} />}
+          {!loading && user && <BookRatingForm bookId={id} currentBook={currentBook} />}
           {id && <BookRatings id={id} />}
         </div>
       )}

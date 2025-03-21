@@ -2,10 +2,10 @@ import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { Book, Rating, User } from "../../types/types";
 import toast, { Toaster } from "react-hot-toast";
-import { AuthRecord } from "pocketbase";
 import { getRatingsByUserAndBookIdPocket } from "../../services/pocketservice";
 import { usePocketBase } from "../../hooks/usePocketbase";
 import { pb } from "../../utils/pocketBaseUtils";
+import { useAuthStore } from "../../utils/useAuthStore";
 
 type DataProps = {
   movie_id: number;
@@ -14,16 +14,16 @@ type DataProps = {
 
 type Props = {
   userRatingByBookId?: Rating | null;
-  session: AuthRecord;
   currentBook: Book;
   userData?: User;
   bookId?: string;
 };
 
-export const BookRatingForm = ({ bookId, session, currentBook, userData }: Props) => {
+export const BookRatingForm = ({ bookId, currentBook, userData }: Props) => {
+  const { user } = useAuthStore();
   const { register, handleSubmit } = useForm<DataProps>();
   const [userRatingScore, setUserRatingScore] = useState<string>("-");
-  const { loading, data: userRatingByBookId, error } = usePocketBase(() => getRatingsByUserAndBookIdPocket(session?.id, bookId));
+  const { loading, data: userRatingByBookId, error } = usePocketBase(() => getRatingsByUserAndBookIdPocket(user?.id, bookId));
 
   async function updateBookRating(formData: FieldValues) {
     const updates = {
@@ -46,8 +46,8 @@ export const BookRatingForm = ({ bookId, session, currentBook, userData }: Props
 
   async function addNewBookRating(formData: FieldValues) {
     const updates = {
-      user_id: session?.id,
-      user_email: session?.email,
+      user_id: user?.id,
+      user_email: user?.email,
       book_id: currentBook?.id,
       book_isbn: currentBook?.isbn,
       username: userData?.username,

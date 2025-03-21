@@ -1,16 +1,16 @@
-import { AuthRecord } from "pocketbase";
 import { Rating } from "../types/types";
 import { LatestRatingsCard } from "./LatestRatingsCard";
+import { useAuthStore } from "../utils/useAuthStore";
 
 type Props = {
   ratings: Rating[];
-  session: AuthRecord;
 };
 
-export const LatestRatings = ({ ratings, session }: Props) => {
+export const LatestRatings = ({ ratings }: Props) => {
+  const { user } = useAuthStore();
   const allRatings = ratings || [];
 
-  if (session) {
+  if (user) {
     return (
       <div className="w-full max-w-xs mt-6 text-white mb-12">
         <h3 className="text-xl font-semibold">Nyeste ratings:</h3>
